@@ -1,0 +1,29 @@
+PODS:
+  - KeyHolder (3.0.1):
+    - Magnet (~> 2.3)
+  - Magnet (2.3.0)
+  - RxCocoa (4.3.1):
+    - RxSwift (~> 4.0)
+  - RxSwift (4.3.1)
+
+DEPENDENCIES:
+  - KeyHolder
+  - RxCocoa (~> 4.0)
+  - RxSwift (~> 4.0)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - KeyHolder
+    - Magnet
+    - RxCocoa
+    - RxSwift
+
+SPEC CHECKSUMS:
+  KeyHolder: 142932db4eac7420b003e2eae94c9a61b8b53cb1
+  Magnet: 85344b019d023e26062199aeb5b4ad1f8d41c5df
+  RxCocoa: 78763c7b07d02455598d9fc3c1ad091a28b73635
+  RxSwift: fe0fd770a43acdb7d0a53da411c9b892e69bb6e4
+
+PODFILE CHECKSUM: dced333bfd73eee3ce075a713f89a7eb74abb1e9
+
+COCOAPODS: 1.5.3

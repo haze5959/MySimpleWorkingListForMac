@@ -1,0 +1,48 @@
+
+/* Class = "NSMenuItem"; title = "MyWorkingListForMac"; ObjectID = "1Xt-HY-uBw"; */
+"1Xt-HY-uBw.title" = "MyWorkingListForMac";
+
+/* Class = "NSMenuItem"; title = "Quit MyWorkingListForMac"; ObjectID = "4sb-4s-VLi"; */
+"4sb-4s-VLi.title" = "Quit MyWorkingListForMac";
+
+/* Class = "NSMenuItem"; title = "About MyWorkingListForMac"; ObjectID = "5kV-Vb-QxS"; */
+"5kV-Vb-QxS.title" = "About MyWorkingListForMac";
+
+/* Class = "NSMenu"; title = "Main Menu"; ObjectID = "AYu-sK-qS6"; */
+"AYu-sK-qS6.title" = "Main Menu";
+
+/* Class = "NSMenuItem"; title = "Close"; ObjectID = "DVo-aG-piG"; */
+"DVo-aG-piG.title" = "Close";
+
+/* Class = "NSMenuItem"; title = "Show All"; ObjectID = "Kd2-mp-pUS"; */
+"Kd2-mp-pUS.title" = "Show All";
+
+/* Class = "NSMenuItem"; title = "Bring All to Front"; ObjectID = "LE2-aR-0XJ"; */
+"LE2-aR-0XJ.title" = "Bring All to Front";
+
+/* Class = "NSMenuItem"; title = "Minimize"; ObjectID = "OY7-WF-poV"; */
+"OY7-WF-poV.title" = "Minimize";
+
+/* Class = "NSMenuItem"; title = "Hide MyWorkingListForMac"; ObjectID = "Olw-nP-bQN"; */
+"Olw-nP-bQN.title" = "Hide MyWorkingListForMac";
+
+/* Class = "NSMenuItem"; title = "Zoom"; ObjectID = "R4o-n2-Eq4"; */
+"R4o-n2-Eq4.title" = "Zoom";
+
+/* Class = "NSMenu"; title = "Window"; ObjectID = "Td7-aD-5lo"; */
+"Td7-aD-5lo.title" = "Window";
+
+/* Class = "NSMenuItem"; title = "Hide Others"; ObjectID = "Vdr-fp-XzO"; */
+"Vdr-fp-XzO.title" = "Hide Others";
+
+/* Class = "NSMenuItem"; title = "Window"; ObjectID = "aUF-d1-5bR"; */
+"aUF-d1-5bR.title" = "Window";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "bib-Uj-vzu"; */
+"bib-Uj-vzu.title" = "File";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "dMs-cI-mzQ"; */
+"dMs-cI-mzQ.title" = "File";
+
+/* Class = "NSMenu"; title = "MyWorkingListForMac"; ObjectID = "uQy-DD-JDr"; */
+"uQy-DD-JDr.title" = "MyWorkingListForMac";
