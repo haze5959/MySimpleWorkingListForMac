@@ -25,6 +25,8 @@
 		178D975921735B09004F0B22 /* baseline_calendar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 178D975721735B09004F0B22 /* baseline_calendar@2x.png */; };
 		178D975A21735B09004F0B22 /* baseline_calendar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 178D975821735B09004F0B22 /* baseline_calendar@3x.png */; };
 		178D9785217C41FA004F0B22 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D9784217C41FA004F0B22 /* IndicatorView.swift */; };
+		17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C92D622206DB03004BC322 /* WorkspaceViewController.swift */; };
+		17C92D652206DB03004BC322 /* WorkspaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17C92D632206DB03004BC322 /* WorkspaceViewController.xib */; };
 		27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */; };
 		D469781BEB7B151C2A513B36 /* Pods_MyWorkingListForMacTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */; };
 /* End PBXBuildFile section */
@@ -101,6 +103,8 @@
 		178D9780217B31FA004F0B22 /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		178D9781217B31FF004F0B22 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/MainMenu.strings; sourceTree = "<group>"; };
 		178D9784217C41FA004F0B22 /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
+		17C92D622206DB03004BC322 /* WorkspaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceViewController.swift; sourceTree = "<group>"; };
+		17C92D632206DB03004BC322 /* WorkspaceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkspaceViewController.xib; sourceTree = "<group>"; };
 		50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWorkingListForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E662CAF3E536D7BBB114A6 /* Pods-MyWorkingListForMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.release.xcconfig"; sourceTree = "<group>"; };
 		93BFA80BB52D8DE1620694E9 /* Pods-MyWorkingListForMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.debug.xcconfig"; sourceTree = "<group>"; };
@@ -182,6 +186,7 @@
 		178D820A2144E8CF00B1E796 /* MyWorkingListForMac */ = {
 			isa = PBXGroup;
 			children = (
+				17C92D612206DAE8004BC322 /* WorkspaceViewController */,
 				178D975521735B09004F0B22 /* Resource */,
 				178D974A216C6DEB004F0B22 /* Model */,
 				17686FB7215F64AD007C5146 /* SettingViewController */,
@@ -229,6 +234,15 @@
 				178D975821735B09004F0B22 /* baseline_calendar@3x.png */,
 			);
 			path = images;
+			sourceTree = "<group>";
+		};
+		17C92D612206DAE8004BC322 /* WorkspaceViewController */ = {
+			isa = PBXGroup;
+			children = (
+				17C92D622206DB03004BC322 /* WorkspaceViewController.swift */,
+				17C92D632206DB03004BC322 /* WorkspaceViewController.xib */,
+			);
+			path = WorkspaceViewController;
 			sourceTree = "<group>";
 		};
 		416441F08D6E73AD38105887 /* Pods */ = {
@@ -346,6 +360,7 @@
 			files = (
 				178D975A21735B09004F0B22 /* baseline_calendar@3x.png in Resources */,
 				17686FAE215B76B7007C5146 /* PopOverViewController.xib in Resources */,
+				17C92D652206DB03004BC322 /* WorkspaceViewController.xib in Resources */,
 				178D975921735B09004F0B22 /* baseline_calendar@2x.png in Resources */,
 				17686FBB215F64CE007C5146 /* SettingViewController.xib in Resources */,
 				178D820E2144E8D100B1E796 /* Assets.xcassets in Resources */,
@@ -439,6 +454,7 @@
 				178D9750216C74C6004F0B22 /* NotificationCustom.swift in Sources */,
 				17686FB9215F64AD007C5146 /* SettingViewController.swift in Sources */,
 				178D974E216C6DEB004F0B22 /* myTask.swift in Sources */,
+				17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */,
 				178D974D216C6DEB004F0B22 /* myWorkspace.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

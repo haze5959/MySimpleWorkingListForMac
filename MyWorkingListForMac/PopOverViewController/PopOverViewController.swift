@@ -153,7 +153,14 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
     }
     
-    @IBAction func pressExtendBtn(_ sender: Any) {
+    @IBAction func pressBookMarkBtn(_ sender: Any) {
+        print("BookMark!")
+        let workspaceVC = WorkspaceViewController.init(nibName: "WorkspaceViewController", bundle: Bundle.main)
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        appDelegate.popover.contentViewController = workspaceVC
+    }
+    
+    @IBAction func pressExtendBtn(_ sender: Any?) {
         let size:CGFloat = (popOverScreenSize(rawValue: UserDefaults.standard.object(forKey: SettingViewController.POPOVER_SCREEN_SIZE) as! Int)?.getSize())!
         
         if isExtendEditView {
@@ -281,6 +288,8 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         print("seleted row: \(row)")
         self.selectedRow = row
+        self.pressExtendBtn(nil)
+        
         return true
     }
     

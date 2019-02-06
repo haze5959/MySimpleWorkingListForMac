@@ -40,6 +40,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         //setting hot key
+        //open popover hot key
         if let hotKeyToOpenData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_OPEN) as? Data {
             if let hotKeyToOpen = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToOpenData) {
                 let hotKey = HotKey(identifier: SettingViewController.HOTKEY_OPEN, keyCombo: hotKeyToOpen, target: self, action: #selector(hotkeyCalled))
@@ -54,6 +55,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             if let encoded = try? JSONEncoder().encode(keyCombo) {
                 UserDefaults.standard.set(encoded, forKey: SettingViewController.HOTKEY_OPEN)
+            }
+        }
+        
+        //edit today hot key
+        if let hotKeyToEditData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_EDIT) as? Data {
+            if let hotKeyToEdit = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToEditData) {
+                let hotKey = HotKey(identifier: SettingViewController.HOTKEY_EDIT, keyCombo: hotKeyToEdit, target: self, action: #selector(hotkeyCalled))
+                hotKey.register()
+            }
+        }
+        
+        //refresh hot key
+        if let hotKeyToRefreshData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_REFRESH) as? Data {
+            if let hotKeyToRefresh = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToRefreshData) {
+                let hotKey = HotKey(identifier: SettingViewController.HOTKEY_REFRESH, keyCombo: hotKeyToRefresh, target: self, action: #selector(hotkeyCalled))
+                hotKey.register()
             }
         }
         
@@ -104,7 +121,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    func openOneBtnDialogOK(question: String, text: String) -> Void
+    func openOneBtnDialogOK(question: String, text: String, _ completion: @escaping () -> Void) -> Void
     {
         DispatchQueue.main.async {
             let alert = NSAlert()
@@ -122,7 +139,9 @@ extension AppDelegate {
         //iCloud 권한 체크
         CKContainer.init(identifier: "iCloud.com.oq.MyWorkingList").accountStatus{ status, error in
             guard status == .available else {
-                self.openOneBtnDialogOK(question: "user’s iCloud is not available", text: "Quit the app.")
+                self.openOneBtnDialogOK(question: "user’s iCloud is not available", text: "Quit the app.", {
+                    NSApplication.shared.terminate(self)    //Quit App
+                })
                 return
             }
             //The user’s iCloud account is available..
@@ -136,7 +155,9 @@ extension AppDelegate {
             self.privateDB.perform(query, inZoneWith: nil) { records, error in
                 guard error == nil else {
                     print("err: \(String(describing: error))");
-                    self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.")
+                    self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.", {
+                        NSApplication.shared.terminate(self)    //Quit App
+                    })
                     return;
                 }
                 
@@ -182,6 +203,14 @@ extension AppDelegate {
         let record = CKRecord(recordType: "workSpace")
         record.setValue(workSpaceName, forKey: "name")
         self.privateDB.save(record) { savedRecord, error in
+            guard error == nil else {
+                print("err: \(String(describing: error))");
+                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                    self.makeWorkSpace(workSpaceName: workSpaceName)
+                })
+                return;
+            }
+            
             //해당 데이터를 워크스페이스 보관 배열에 넣는다.
             let workSpace = myWorkspace.init(id: (savedRecord?.recordID.recordName)!, name: savedRecord?.value(forKey: "name") as! String);
             UserDefaults().set(workSpace.id, forKey: "seletedWorkSpaceId");
@@ -200,10 +229,14 @@ extension AppDelegate {
     func updateWorkSpace(recordId:String, newName:String) -> Void {
         //******클라우드에 워크스페이즈 수정******
         NotificationCenter.default.post(name: .showProgress, object: nil)
-        let recordId = CKRecord.ID(recordName: recordId)
-        self.privateDB.fetch(withRecordID: recordId) { updatedRecord, error in
-            if error != nil {
-                return
+        let recordIdObject = CKRecord.ID(recordName: recordId)
+        self.privateDB.fetch(withRecordID: recordIdObject) { updatedRecord, error in
+            guard error == nil else {
+                print("err: \(String(describing: error))");
+                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                    self.updateWorkSpace(recordId: recordId, newName: newName)
+                })
+                return;
             }
             
             updatedRecord?.setObject(newName as CKRecordValue, forKey: "name");
@@ -231,7 +264,9 @@ extension AppDelegate {
         self.privateDB.perform(query, inZoneWith: nil) { records, error in
             guard error == nil else {
                 print("err: \(String(describing: error))");
-                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.")
+                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                    self.getDayTask(startDate: startDate, endDate: endDate, workSpaceId: workSpaceId)
+                })
                 return;
             }
             
@@ -265,6 +300,14 @@ extension AppDelegate {
         record.setValue(taskBody, forKey: "body");
         record.setValue(taskTitle, forKey: "title");
         self.privateDB.save(record) { savedRecord, error in
+            guard error == nil else {
+                print("err: \(String(describing: error))");
+                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                    self.makeDayTask(workSpaceId: workSpaceId, taskDate: taskDate, taskBody: taskBody, taskTitle: taskTitle, index: index)
+                })
+                return;
+            }
+            
             //해당 데이터를 워크스페이스 보관 배열에 넣는다.
             let task = myTask.init((savedRecord?.recordID.recordName)!, savedRecord?.value(forKey: "date") as! Date, savedRecord?.value(forKey: "body") as! String, savedRecord?.value(forKey: "title") as? String);
             
@@ -287,8 +330,12 @@ extension AppDelegate {
         NotificationCenter.default.post(name: .showProgress, object: nil)
         let recordId = CKRecord.ID(recordName: task.id)
         self.privateDB.fetch(withRecordID: recordId) { updatedRecord, error in
-            if error != nil {
-                return
+            guard error == nil else {
+                print("err: \(String(describing: error))");
+                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                    self.updateDayTask(task: task, index: index)
+                })
+                return;
             }
             
             if task.title != nil {
@@ -317,7 +364,9 @@ extension AppDelegate {
         self.privateDB.perform(query, inZoneWith: nil) { records, error in
             guard error == nil else {
                 print("err: \(String(describing: error))");
-                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.")
+                self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                    self.deleteRecord(recordId: recordId)
+                })
                 return;
             }
             
@@ -330,7 +379,9 @@ extension AppDelegate {
                     self.privateDB.delete(withRecordID: record.recordID) { deletedRecordId, error in
                         guard error == nil else {
                             print("err: \(String(describing: error))");
-                            self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.")
+                            self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                                self.deleteRecord(recordId: recordId)
+                            })
                             return;
                         }
                     }
@@ -339,11 +390,13 @@ extension AppDelegate {
             
             dispatchGroup.notify(queue: DispatchQueue.main) {
                 //워크스페이스 삭제
-                let recordId = CKRecord.ID(recordName: recordId)
-                self.privateDB.delete(withRecordID: recordId) { deletedRecordId, error in
+                let recordIdObject = CKRecord.ID(recordName: recordId)
+                self.privateDB.delete(withRecordID: recordIdObject) { deletedRecordId, error in
                     guard error == nil else {
                         print("err: \(String(describing: error))");
-                        self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.")
+                        self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
+                            self.deleteRecord(recordId: recordId)
+                        })
                         return;
                     }
                     

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -37,7 +37,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Clr-G3-kdO">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Clr-G3-kdO" userLabel="PrefBtn">
                     <rect key="frame" x="10" y="0.0" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="30" id="S78-rg-rDm"/>
@@ -51,7 +51,7 @@
                         <action selector="pressSettingBtn:" target="-2" id="xJo-Sg-Uxg"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pyT-Yd-u4Q">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="pyT-Yd-u4Q" userLabel="RefreshBtn">
                     <rect key="frame" x="40" y="0.0" width="30" height="30"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="SiN-e0-7Zv"/>
@@ -63,6 +63,20 @@
                     </buttonCell>
                     <connections>
                         <action selector="pressRefreshBtn:" target="-2" id="nqK-ok-8DE"/>
+                    </connections>
+                </button>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z3v-DA-nY9" userLabel="BookMarkBtn">
+                    <rect key="frame" x="70" y="0.0" width="30" height="30"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="W0i-rQ-6d0"/>
+                        <constraint firstAttribute="width" constant="30" id="xH4-Kc-xSK"/>
+                    </constraints>
+                    <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="NSBookmarksTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="TF5-jA-sKG">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="pressBookMarkBtn:" target="-2" id="NqI-r2-e7g"/>
                     </connections>
                 </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="97" horizontalPageScroll="10" verticalLineScroll="97" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="uRp-jk-bMi">
@@ -211,20 +225,6 @@
                         <action selector="pressExtendBtn:" target="-2" id="oze-5r-UPf"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z3v-DA-nY9">
-                    <rect key="frame" x="70" y="0.0" width="30" height="30"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="30" id="W0i-rQ-6d0"/>
-                        <constraint firstAttribute="width" constant="30" id="xH4-Kc-xSK"/>
-                    </constraints>
-                    <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="baseline_calendar" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="TF5-jA-sKG">
-                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <action selector="pressRefreshBtn:" target="-2" id="crk-37-ml3"/>
-                    </connections>
-                </button>
                 <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S9B-0e-3qf" customClass="IndicatorView" customModule="MyWorkingListForMac" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="500" height="647"/>
                 </customView>
@@ -258,8 +258,8 @@
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSBookmarksTemplate" width="17" height="18"/>
         <image name="NSEnterFullScreenTemplate" width="15" height="15"/>
         <image name="NSRefreshTemplate" width="11" height="15"/>
-        <image name="baseline_calendar" width="24" height="24"/>
     </resources>
 </document>

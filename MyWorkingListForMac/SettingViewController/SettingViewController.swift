@@ -32,11 +32,15 @@ enum popOverScreenSize: Int {
 class SettingViewController: NSViewController {
     let disposeBag = DisposeBag();
     static let HOTKEY_OPEN = "KeyHolderOpen"
+    static let HOTKEY_EDIT = "KeyHolderEdit"
+    static let HOTKEY_REFRESH = "KeyHolderRefresh"
     static let POPOVER_SCREEN_SIZE = "popOverScreenSize"
     @IBOutlet weak var syncTimeLabel: NSTextField!
     @IBOutlet weak var icloudOwnerLabel: NSTextField!
     
-    @IBOutlet weak var recordView: RecordView!
+    @IBOutlet weak var openPopoverRecordView: RecordView!
+    @IBOutlet weak var editTodayRecordView: RecordView!
+    @IBOutlet weak var refreshRecordView: RecordView!
     
     @IBOutlet weak var smallRadioBtn: NSButton!
     @IBOutlet weak var mediumRadioBtn: NSButton!
@@ -47,7 +51,9 @@ class SettingViewController: NSViewController {
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         appDelegate.eventMonitor?.stop()
         
-        self.recordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
+        self.openPopoverRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
+        self.editTodayRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
+        self.refreshRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
         
         appDelegate.container.requestApplicationPermission(.userDiscoverability) { (status, error) in
             appDelegate.container.fetchUserRecordID { (recordId, error) in
@@ -110,8 +116,8 @@ class SettingViewController: NSViewController {
         //get hotkey from userDefault
         if let hotKeyToOpenData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_OPEN) as? Data {
             if let hotKeyToOpen = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToOpenData) {
-                self.recordView.keyCombo = hotKeyToOpen
-                self.recordView.delegate = self
+                self.openPopoverRecordView.keyCombo = hotKeyToOpen
+                self.openPopoverRecordView.delegate = self
             }
         }
         
@@ -127,7 +133,6 @@ class SettingViewController: NSViewController {
 
     @IBAction func pressCloseBtn(_ sender: Any) {
         //present work list View
-//        let popOverVC = PopOverViewController.init(nibName: "PopOverViewController", bundle: Bundle.main)
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         appDelegate.popover.contentViewController = SharedData.instance.popOverVC
         appDelegate.eventMonitor?.start()
