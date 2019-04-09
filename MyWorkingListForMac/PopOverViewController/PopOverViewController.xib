@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="System colors introduced in macOS 10.14" minToolsVersion="10.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -121,7 +121,7 @@
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="vUJ-ms-tMR">
                                                         <rect key="frame" x="0.0" y="0.0" width="498" height="17"/>
-                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" drawsBackground="YES" id="tzI-T4-iKQ">
+                                                        <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" alignment="left" drawsBackground="YES" id="tzI-T4-iKQ">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <color key="backgroundColor" name="unemphasizedSelectedTextColor" catalog="System" colorSpace="catalog"/>
@@ -206,6 +206,10 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="100" id="nEv-d1-AB7"/>
                     </constraints>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="3CQ-lI-MBd">
+                        <rect key="frame" x="-100" y="-100" width="500" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
                     <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="WC0-bg-jtR">
                         <rect key="frame" x="484" y="0.0" width="16" height="100"/>
                         <autoresizingMask key="autoresizingMask"/>

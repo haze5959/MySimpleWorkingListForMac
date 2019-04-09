@@ -116,29 +116,31 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         
         //데이터 초기화 옵져버
         Observable<myWorkspace>.create{ observer in
-            SharedData.instance.workSpaceUpdateObserver = observer;
-            return Disposables.create();
+            SharedData.instance.workSpaceUpdateObserver = observer
+            return Disposables.create()
             }.observeOn(MainScheduler.instance)
             .subscribe{
                 print("[PopOverVC] load task in cloud data")
-                self.titleLabel.stringValue = $0.element!.name;
-                
+                self.titleLabel.stringValue = $0.element!.name
+                self.taskData.removeAll()
                 //날짜 그리기
                 if  (($0.element?.pivotDate) != nil) {
-                    self.initTaskData(pivotDate: $0.element?.pivotDate);
+                    self.initTaskData(pivotDate: $0.element?.pivotDate)
                 } else {
-                    self.initTaskData(pivotDate: Date());
+                    self.initTaskData(pivotDate: Date())
                 }
                 
                 //클라우드에서 일일데이터를 가져오고 테이블 리로드
-                (NSApplication.shared.delegate as! AppDelegate).getDayTask(startDate: (self.taskData.first?.date)!, endDate: (self.taskData.last?.date)!, workSpaceId: (SharedData.instance.seletedWorkSpace?.id)!);
+                (NSApplication.shared.delegate as! AppDelegate).getDayTask(startDate: (self.taskData.first?.date)!, endDate: (self.taskData.last?.date)!, workSpaceId: (SharedData.instance.seletedWorkSpace?.id)!)
                 
-            }.disposed(by: self.disposeBag);
+            }.disposed(by: self.disposeBag)
         
-        SharedData.instance.popViewContrllerDelegate = self;
+        SharedData.instance.popViewContrllerDelegate = self
         
         //테스크 그리기
-        SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!);
+        SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
+        
+        self.setDidChangeTextViewNoti()
     }
     
     @IBAction func pressSettingBtn(_ sender: Any) {
@@ -266,6 +268,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     }
 }
 
+// MARK: TableView
 extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
     
     fileprivate enum CellIdentifiers {
@@ -288,6 +291,9 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         print("seleted row: \(row)")
         self.selectedRow = row
+        let task = self.taskData[self.selectedRow]
+        
+        self.textView.string = task.body
         self.pressExtendBtn(nil)
         
         return true
@@ -351,3 +357,31 @@ class CustomCellView: NSTableCellView {
     }
     
 }
+
+// MARK: ==============================
+// MARK: NSTextView
+extension PopOverViewController {
+    func setDidChangeTextViewNoti() {
+        print("ddddd")
+        NotificationCenter.default.rx
+            .notification(NSText.didChangeNotification, object: self.textView)
+            .debounce(1, scheduler: MainScheduler.instance)
+            .subscribe({ notification in
+                print("ddddd2 \(self.textView.string)")
+                
+                //테스크 생성
+                let task = self.taskData[self.selectedRow]
+                task.body = self.textView.string
+                
+                let indexSet = IndexSet.init(integer: self.selectedRow)
+                
+                self.tableView.beginUpdates()
+                self.tableView.removeRows(at: indexSet, withAnimation: .effectFade)
+                self.tableView.insertRows(at: indexSet, withAnimation: .effectFade)
+                self.tableView.endUpdates()
+                
+            }).disposed(by: self.disposeBag)
+    }
+}
+
+

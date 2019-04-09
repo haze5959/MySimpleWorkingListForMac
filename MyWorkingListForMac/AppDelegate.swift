@@ -189,7 +189,7 @@ extension AppDelegate {
                 }
                 
                 //클라우드 변경사항 노티 적용
-                self.saveSubscription()
+//                self.saveSubscription()
             }
         }
     }
@@ -413,43 +413,43 @@ extension AppDelegate {
     // MARK: ==============================
     
     // MARK: - Notification related cloud
-    public func saveSubscription() {
-        // RecordType specifies the type of the record
-        let subscriptionID = "cloudkit-recordType-changes"
-        // Let's keep a local flag handy to avoid saving the subscription more than once.
-        // Even if you try saving the subscription multiple times, the server doesn't save it more than once
-        // Nevertheless, let's save some network operation and conserve resources
-        let subscriptionSaved = UserDefaults.standard.bool(forKey: subscriptionID)
-        guard !subscriptionSaved else {
-            return
-        }
-        
-        // Subscribing is nothing but saving a query which the server would use to generate notifications.
-        // The below predicate (query) will raise a notification for all changes.
-        let predicate = NSPredicate(value: true)
-        let subscription = CKQuerySubscription(recordType: "dayTask",
-                                               predicate: predicate,
-                                               subscriptionID: subscriptionID,
-                                               options: [.firesOnRecordCreation, .firesOnRecordDeletion, .firesOnRecordUpdate])
-        
-        let notificationInfo = CKSubscription.NotificationInfo()
-        // Set shouldSendContentAvailable to true for receiving silent pushes
-        // Silent notifications are not shown to the user and don’t require the user's permission.
-        notificationInfo.shouldSendContentAvailable = true
-        subscription.notificationInfo = notificationInfo
-        
-        // Use CKModifySubscriptionsOperation to save the subscription to CloudKit
-        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: [])
-        operation.modifySubscriptionsCompletionBlock = { (_, _, error) in
-            guard error == nil else {
-                return
-            }
-            UserDefaults.standard.set(true, forKey: subscriptionID)
-        }
-        
-        // Add the operation to the corresponding private or public database
-        self.privateDB.add(operation)
-    }
+//    public func saveSubscription() {
+//        // RecordType specifies the type of the record
+//        let subscriptionID = "cloudkit-recordType-changes"
+//        // Let's keep a local flag handy to avoid saving the subscription more than once.
+//        // Even if you try saving the subscription multiple times, the server doesn't save it more than once
+//        // Nevertheless, let's save some network operation and conserve resources
+//        let subscriptionSaved = UserDefaults.standard.bool(forKey: subscriptionID)
+//        guard !subscriptionSaved else {
+//            return
+//        }
+//
+//        // Subscribing is nothing but saving a query which the server would use to generate notifications.
+//        // The below predicate (query) will raise a notification for all changes.
+//        let predicate = NSPredicate(value: true)
+//        let subscription = CKQuerySubscription(recordType: "dayTask",
+//                                               predicate: predicate,
+//                                               subscriptionID: subscriptionID,
+//                                               options: [.firesOnRecordCreation, .firesOnRecordDeletion, .firesOnRecordUpdate])
+//
+//        let notificationInfo = CKSubscription.NotificationInfo()
+//        // Set shouldSendContentAvailable to true for receiving silent pushes
+//        // Silent notifications are not shown to the user and don’t require the user's permission.
+//        notificationInfo.shouldSendContentAvailable = true
+//        subscription.notificationInfo = notificationInfo
+//
+//        // Use CKModifySubscriptionsOperation to save the subscription to CloudKit
+//        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: [])
+//        operation.modifySubscriptionsCompletionBlock = { (_, _, error) in
+//            guard error == nil else {
+//                return
+//            }
+//            UserDefaults.standard.set(true, forKey: subscriptionID)
+//        }
+//
+//        // Add the operation to the corresponding private or public database
+//        self.privateDB.add(operation)
+//    }
     
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String : Any]) {
         // Whenever there's a remote notification, this gets called
