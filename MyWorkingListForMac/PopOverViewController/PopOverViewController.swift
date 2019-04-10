@@ -21,6 +21,11 @@ public protocol PopOverViewControllerDelegate {
      모든 셀 업데이트
      */
     func reloadTableAll() -> Void;
+    
+    /**
+     리프레시 타임 라벨 업데이트
+     */
+    func setRefreshTimeLabel(text:String) -> Void;
 }
 
 class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
@@ -31,6 +36,9 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     @IBOutlet weak var editViewHeight: NSLayoutConstraint!
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var extendBtn: NSButton!
+    @IBOutlet weak var refreshTimeLabel: NSTextField!
+    @IBOutlet weak var datePicker: NSDatePicker!
+    @IBOutlet weak var dateUpdateBtn: NSButton!
     
     @IBOutlet weak var indicatorView: IndicatorView!
     /**
@@ -46,7 +54,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     /**
      테이블의 모든 셀의 데이터를 담는다.(사용자가 기입하지 않은 날의 데이터도 들어있음)
      */
-    var taskData: Array<myTask> = [];
+    var taskData: Array<myTask> = []
     
 //    lazy var refreshControl: NSRefreshControl = {
 //        let refreshControl = UIRefreshControl();
@@ -56,11 +64,10 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
 //        return refreshControl
 //    }()
     
-    let disposeBag = DisposeBag();
-    let MARGIN_TO_PAST_DAY = -1;
-    let MARGIN_TO_AFTER_DAY = 30;
+    let disposeBag = DisposeBag()
     
-    let EDIT_VIEW_HEIGHT = 100;
+    let EDIT_VIEW_HEIGHT = 100
+    let TIMER_CHECK_REFRESH_INTERVAL: RxTimeInterval = 100 //100초마다 체크
     
     // MARK: ==============================
     // MARK: PopOverViewControllerDelegate
@@ -70,7 +77,11 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         self.taskData[index].body = body;
 
         DispatchQueue.main.async {
-            self.tableView.reloadData();
+            let indexSet = IndexSet.init(integer: index)
+            self.tableView.beginUpdates()
+            self.tableView.removeRows(at: indexSet, withAnimation: .effectFade)
+            self.tableView.insertRows(at: indexSet, withAnimation: .effectFade)
+            self.tableView.endUpdates()
         }
     }
     
@@ -94,6 +105,12 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         }
     }
     
+    func setRefreshTimeLabel(text:String) {
+        DispatchQueue.main.async {
+            self.refreshTimeLabel.stringValue = text
+        }
+    }
+    
     // MARK: ==============================
     // MARK: viewDidLoad
     override func viewDidLoad() {
@@ -114,6 +131,12 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(showProgress), name: .showProgress, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(closeProgress), name: .closeProgress, object: nil)
         
+        //datePicker 이밴트 맵핑
+        self.datePicker.target = self
+        self.datePicker.action = #selector(datePickerChangeHandler)
+        let action = NSEvent.EventTypeMask.mouseExited
+        self.datePicker.sendAction(on: action)
+        
         //데이터 초기화 옵져버
         Observable<myWorkspace>.create{ observer in
             SharedData.instance.workSpaceUpdateObserver = observer
@@ -123,6 +146,8 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
                 print("[PopOverVC] load task in cloud data")
                 self.titleLabel.stringValue = $0.element!.name
                 self.taskData.removeAll()
+                SharedData.instance.taskAllDic.removeAllObjects()
+                
                 //날짜 그리기
                 if  (($0.element?.pivotDate) != nil) {
                     self.initTaskData(pivotDate: $0.element?.pivotDate)
@@ -132,6 +157,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
                 
                 //클라우드에서 일일데이터를 가져오고 테이블 리로드
                 (NSApplication.shared.delegate as! AppDelegate).getDayTask(startDate: (self.taskData.first?.date)!, endDate: (self.taskData.last?.date)!, workSpaceId: (SharedData.instance.seletedWorkSpace?.id)!)
+                self.dateUpdateBtn.isHidden = true
                 
             }.disposed(by: self.disposeBag)
         
@@ -141,6 +167,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
         
         self.setDidChangeTextViewNoti()
+        self.setSyncTimeUpdateNoti()
     }
     
     @IBAction func pressSettingBtn(_ sender: Any) {
@@ -190,9 +217,33 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         }
     }
     
+    @IBAction func pressDateUpdateBtn(_ sender: Any) {
+        let pivotDate = self.datePicker.dateValue
+        SharedData.instance.seletedWorkSpace?.pivotDate = pivotDate
+        SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
+    }
+    
+    
     @objc func popoverWillShow() -> Void {
         self.textScrollView.flashScrollers()
         self.textView.window?.makeFirstResponder(self.textView.superview)
+    }
+    
+    @objc func datePickerChangeHandler() -> Void {
+        
+        let pivotDate = self.datePicker.dateValue
+        
+        //same date check
+        let dateFormatter = DateFormatter()
+        dateFormatter.setLocalizedDateFormatFromTemplate("MM/yyyy")
+        let taskDateForTodayCheck:String = dateFormatter.string(from: pivotDate)
+        let todayDateForTodayCheck:String = dateFormatter.string(from: SharedData.instance.seletedWorkSpace!.pivotDate!)
+        
+        if taskDateForTodayCheck == todayDateForTodayCheck {  //년월이 같다면
+            self.dateUpdateBtn.isHidden = true
+        } else {
+            self.dateUpdateBtn.isHidden = false
+        }
     }
     
     @objc func showProgress() -> Void {
@@ -209,11 +260,21 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
      테이블 뷰 데이터 초기화
      */
     func initTaskData(pivotDate:Date!) -> Void {
+        self.datePicker.dateValue = pivotDate
+        
+        //달에 몇일이나 있는지 가져오는 로직
+        let calendar = Calendar.current
+        let days = calendar.range(of: .day, in: .month, for: pivotDate)!
+        
+        //해당 달의 시작일을 구하는 로직
+        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.startOfDay(for: pivotDate)))!
+        
         let dayKeyFormatter = DateFormatter();
         dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyMMdd");
+        
         //과거로부터 현재 미래까지
-        for i in MARGIN_TO_PAST_DAY..<MARGIN_TO_AFTER_DAY{
-            let date:Date = (Calendar.current.date(byAdding: .day, value: i, to: pivotDate))!;
+        for i in 0..<days.count {
+            let date:Date = (Calendar.current.date(byAdding: .day, value: i, to: startOfMonth))!;
             
             //*********dayKey 생성***********
             let dayKey:String = dayKeyFormatter.string(from: date);
@@ -222,45 +283,6 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
             
             if (dayTask != nil) {
                 self.taskData.append(myTask(dayTask!.id, date, dayTask!.body, dayTask!.title));
-            } else {
-                self.taskData.append(myTask("", date, "", nil));
-            }
-        }
-    }
-    
-    func insertTaskData(pivotDate:Date!, amountOfNumber:Int) -> Void {
-        
-        let dayKeyFormatter = DateFormatter();
-        dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyMMdd");
-        //과거로부터 현재 미래까지
-        for i in 1..<amountOfNumber+1{
-            let pastDate:Date = (Calendar.current.date(byAdding: .day, value: -i, to: pivotDate))!;
-            //*********dayKey 생성***********
-            let dayKey:String = dayKeyFormatter.string(from: pastDate);
-            //******************************
-            let dayTask:myTask? = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask;
-            
-            if(dayTask != nil){
-                self.taskData.insert(myTask((dayTask?.id)!, pastDate, (dayTask?.body)!, (dayTask?.title)!), at: 0);
-            } else {
-                self.taskData.insert(myTask("", pastDate, "", nil), at: 0);
-            }
-        }
-    }
-    
-    func appendTaskData(pivotDate:Date!, amountOfNumber:Int) -> Void {
-        let dayKeyFormatter = DateFormatter();
-        dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyMMdd");
-        //과거로부터 현재 미래까지
-        for i in 1..<amountOfNumber+1{
-            let date:Date = (Calendar.current.date(byAdding: .day, value: i, to: pivotDate))!;
-            //*********dayKey 생성***********
-            let dayKey:String = dayKeyFormatter.string(from: date);
-            //******************************
-            let dayTask:myTask? = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask;
-            
-            if(dayTask != nil){
-                self.taskData.append(myTask((dayTask?.id)!, date, (dayTask?.body)!, (dayTask?.title)!));
             } else {
                 self.taskData.append(myTask("", date, "", nil));
             }
@@ -294,7 +316,7 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
         let task = self.taskData[self.selectedRow]
         
         self.textView.string = task.body
-        self.pressExtendBtn(nil)
+//        self.pressExtendBtn(nil)
         
         return true
     }
@@ -311,11 +333,15 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
             let dateFormatter = DateFormatter()
             dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
             let dayOfWeek:String = dateFormatter.string(from: task.date)
-            dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd/yyyy")
+            dateFormatter.setLocalizedDateFormatFromTemplate("dd")
             let taskDate:String = dateFormatter.string(from: task.date)
-            let todayDate:String = dateFormatter.string(from: Date())
             
-            if taskDate == todayDate {  //오늘이라면
+            //today check
+            dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd/yyyy")
+            let taskDateForTodayCheck:String = dateFormatter.string(from: task.date)
+            let todayDateForTodayCheck:String = dateFormatter.string(from: Date())
+            
+            if taskDateForTodayCheck == todayDateForTodayCheck {  //오늘이라면
                 dateText = "\(taskDate) [\(dayOfWeek)] - today!"
                 cell.titleLabel?.backgroundColor = NSColor.init(red: 255/255, green: 224/255, blue: 178/255, alpha: 1)
             } else {
@@ -359,17 +385,13 @@ class CustomCellView: NSTableCellView {
 }
 
 // MARK: ==============================
-// MARK: NSTextView
+// MARK: Noti 관련
 extension PopOverViewController {
     func setDidChangeTextViewNoti() {
-        print("ddddd")
         NotificationCenter.default.rx
             .notification(NSText.didChangeNotification, object: self.textView)
             .debounce(1, scheduler: MainScheduler.instance)
             .subscribe({ notification in
-                print("ddddd2 \(self.textView.string)")
-                
-                //테스크 생성
                 let task = self.taskData[self.selectedRow]
                 task.body = self.textView.string
                 
@@ -381,6 +403,15 @@ extension PopOverViewController {
                 self.tableView.endUpdates()
                 
             }).disposed(by: self.disposeBag)
+    }
+    
+    func setSyncTimeUpdateNoti() {
+        let timer = Observable<Int>.interval(TIMER_CHECK_REFRESH_INTERVAL, scheduler: MainScheduler.instance)    // 0.5초마다 발행
+        timer.subscribe { (time) in
+            let syncTime:Double = UserDefaults.standard.object(forKey: AppDelegate.CLOUD_SYNC_TIME) as! Double
+            let timeInterval = Date().timeIntervalSince1970 - syncTime
+            self.setRefreshTimeLabel(text: MyWorkingListUtil.transformTimeToString(time: Int(timeInterval)))
+        }.disposed(by: self.disposeBag)
     }
 }
 

@@ -29,17 +29,18 @@ enum popOverScreenSize: Int {
     }
 }
 
+enum hotKeyEnum: String {
+    case HOTKEY_OPEN = "KeyHolderOpen"
+    case HOTKEY_REFRESH = "KeyHolderRefresh"
+}
+
 class SettingViewController: NSViewController {
     let disposeBag = DisposeBag();
-    static let HOTKEY_OPEN = "KeyHolderOpen"
-    static let HOTKEY_EDIT = "KeyHolderEdit"
-    static let HOTKEY_REFRESH = "KeyHolderRefresh"
     static let POPOVER_SCREEN_SIZE = "popOverScreenSize"
     @IBOutlet weak var syncTimeLabel: NSTextField!
     @IBOutlet weak var icloudOwnerLabel: NSTextField!
     
     @IBOutlet weak var openPopoverRecordView: RecordView!
-    @IBOutlet weak var editTodayRecordView: RecordView!
     @IBOutlet weak var refreshRecordView: RecordView!
     
     @IBOutlet weak var smallRadioBtn: NSButton!
@@ -52,7 +53,6 @@ class SettingViewController: NSViewController {
         appDelegate.eventMonitor?.stop()
         
         self.openPopoverRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
-        self.editTodayRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
         self.refreshRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
         
         appDelegate.container.requestApplicationPermission(.userDiscoverability) { (status, error) in
@@ -112,12 +112,21 @@ class SettingViewController: NSViewController {
                 UserDefaults.standard.set(popOverScreenSize.rawValue, forKey: SettingViewController.POPOVER_SCREEN_SIZE)
         }.disposed(by: self.disposeBag)
         
-
+        self.openPopoverRecordView.delegate = self
+        self.refreshRecordView.delegate = self
+        
         //get hotkey from userDefault
-        if let hotKeyToOpenData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_OPEN) as? Data {
+        if let hotKeyToOpenData = UserDefaults.standard.object(forKey: hotKeyEnum.HOTKEY_OPEN.rawValue) as? Data {
             if let hotKeyToOpen = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToOpenData) {
                 self.openPopoverRecordView.keyCombo = hotKeyToOpen
-                self.openPopoverRecordView.delegate = self
+                
+            }
+        }
+        
+        if let hotKeyToRefreshData = UserDefaults.standard.object(forKey: hotKeyEnum.HOTKEY_REFRESH.rawValue) as? Data {
+            if let hotKeyToRefresh = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToRefreshData) {
+                self.refreshRecordView.keyCombo = hotKeyToRefresh
+                
             }
         }
         
@@ -128,7 +137,8 @@ class SettingViewController: NSViewController {
         
         let syncTime:Double = UserDefaults.standard.object(forKey: AppDelegate.CLOUD_SYNC_TIME) as! Double
         let timeInterval = Date().timeIntervalSince1970 - syncTime
-        self.syncTimeLabel.stringValue = self.transformTimeToString(time: Int(timeInterval))
+
+        self.syncTimeLabel.stringValue = MyWorkingListUtil.transformTimeToString(time: Int(timeInterval))
     }
 
     @IBAction func pressCloseBtn(_ sender: Any) {
@@ -151,8 +161,9 @@ extension SettingViewController: RecordViewDelegate {
     }
     
     func recordViewDidClearShortcut(_ recordView: RecordView) {
-        print("clear shortcut")
-        HotKeyCenter.shared.unregisterHotKey(with: SettingViewController.HOTKEY_OPEN)
+        print("clear shortcut \(recordView.identifier?.rawValue ?? "Unkown")")
+        HotKeyCenter.shared.unregisterHotKey(with: recordView.identifier!.rawValue)
+        UserDefaults.standard.removeObject(forKey: hotKeyEnum.HOTKEY_OPEN.rawValue)
     }
     
     func recordViewDidEndRecording(_ recordView: RecordView) {
@@ -160,43 +171,23 @@ extension SettingViewController: RecordViewDelegate {
     }
     
     func recordView(_ recordView: RecordView, didChangeKeyCombo keyCombo: KeyCombo) {
-        HotKeyCenter.shared.unregisterHotKey(with: SettingViewController.HOTKEY_OPEN)
-        let hotKey = HotKey(identifier: SettingViewController.HOTKEY_OPEN, keyCombo: keyCombo, target: NSApplication.shared.delegate as! AppDelegate, action: #selector(AppDelegate.hotkeyCalled))
-        hotKey.register()
+        print("edit recording")
+        HotKeyCenter.shared.unregisterHotKey(with: recordView.identifier!.rawValue)
+        let hotKeyVal =  hotKeyEnum.init(rawValue: recordView.identifier!.rawValue)!
+        
+        switch hotKeyVal {
+        case .HOTKEY_OPEN:
+            let hotKey = HotKey(identifier: hotKeyVal.rawValue, keyCombo: keyCombo, target: NSApplication.shared.delegate as! AppDelegate, action: #selector(AppDelegate.hotkeyOpenCalled))
+            hotKey.register()
+            
+        case .HOTKEY_REFRESH:
+            let hotKey = HotKey(identifier: hotKeyVal.rawValue, keyCombo: keyCombo, target: NSApplication.shared.delegate as! AppDelegate, action: #selector(AppDelegate.hotkeyRefreshCalled))
+            hotKey.register()
+        }
         
         if let encoded = try? JSONEncoder().encode(keyCombo) {
-            UserDefaults.standard.set(encoded, forKey: SettingViewController.HOTKEY_OPEN)
+            UserDefaults.standard.set(encoded, forKey: recordView.identifier!.rawValue)
         }
     }
-    
-// MARK: - Time to String
-    func transformTimeToString(time: Int) -> String {
-        var timeVal = time
-        if timeVal > 60 {   //mintue
-            timeVal = timeVal/60
-            
-            if timeVal > 60 {   //hour
-                timeVal = timeVal/60
-                
-                if timeVal > 24 {   //day
-                    timeVal = timeVal/24
-                    
-                    if timeVal > 30 {   //month
-                        timeVal = timeVal/30
-                        
-                        if timeVal > 12 {   //year
-                            timeVal = timeVal/12
-                            return "\(timeVal) years ago.."
-                        }
-                        return "\(timeVal) months ago.."
-                    }
-                    return "\(timeVal) days ago.."
-                }
-                return "\(timeVal) hours ago.."
-            }
-            return "\(timeVal) minutes ago.."
-        }
-        
-        return "Now"
-    }
+
 }

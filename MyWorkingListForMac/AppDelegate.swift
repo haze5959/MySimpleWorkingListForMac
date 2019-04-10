@@ -41,35 +41,27 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         //setting hot key
         //open popover hot key
-        if let hotKeyToOpenData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_OPEN) as? Data {
+        if let hotKeyToOpenData = UserDefaults.standard.object(forKey: hotKeyEnum.HOTKEY_OPEN.rawValue) as? Data {
             if let hotKeyToOpen = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToOpenData) {
-                let hotKey = HotKey(identifier: SettingViewController.HOTKEY_OPEN, keyCombo: hotKeyToOpen, target: self, action: #selector(hotkeyCalled))
+                let hotKey = HotKey(identifier: hotKeyEnum.HOTKEY_OPEN.rawValue, keyCombo: hotKeyToOpen, target: self, action: #selector(hotkeyOpenCalled))
                 hotKey.register()
             }
         
         } else {
             //default shortcut key
             let keyCombo = KeyCombo(doubledCocoaModifiers: .shift)
-            let hotKey = HotKey(identifier: SettingViewController.HOTKEY_OPEN, keyCombo: keyCombo!, target: self, action: #selector(hotkeyCalled))
+            let hotKey = HotKey(identifier: hotKeyEnum.HOTKEY_OPEN.rawValue, keyCombo: keyCombo!, target: self, action: #selector(hotkeyOpenCalled))
             hotKey.register()
 
             if let encoded = try? JSONEncoder().encode(keyCombo) {
-                UserDefaults.standard.set(encoded, forKey: SettingViewController.HOTKEY_OPEN)
-            }
-        }
-        
-        //edit today hot key
-        if let hotKeyToEditData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_EDIT) as? Data {
-            if let hotKeyToEdit = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToEditData) {
-                let hotKey = HotKey(identifier: SettingViewController.HOTKEY_EDIT, keyCombo: hotKeyToEdit, target: self, action: #selector(hotkeyCalled))
-                hotKey.register()
+                UserDefaults.standard.set(encoded, forKey: hotKeyEnum.HOTKEY_OPEN.rawValue)
             }
         }
         
         //refresh hot key
-        if let hotKeyToRefreshData = UserDefaults.standard.object(forKey: SettingViewController.HOTKEY_REFRESH) as? Data {
+        if let hotKeyToRefreshData = UserDefaults.standard.object(forKey: hotKeyEnum.HOTKEY_REFRESH.rawValue) as? Data {
             if let hotKeyToRefresh = try? JSONDecoder().decode(KeyCombo.self, from: hotKeyToRefreshData) {
-                let hotKey = HotKey(identifier: SettingViewController.HOTKEY_REFRESH, keyCombo: hotKeyToRefresh, target: self, action: #selector(hotkeyCalled))
+                let hotKey = HotKey(identifier: hotKeyEnum.HOTKEY_REFRESH.rawValue, keyCombo: hotKeyToRefresh, target: self, action: #selector(hotkeyRefreshCalled))
                 hotKey.register()
             }
         }
@@ -102,9 +94,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.eventMonitor?.stop()
     }
     
-    @objc func hotkeyCalled() {
-        print("[AppDelegate] HotKey called!!!!")
+    @objc func hotkeyOpenCalled() {
+        print("[AppDelegate] HotKey Open called!!!!")
         togglePopover(nil)
+    }
+    
+    @objc func hotkeyEditCalled() {
+        print("[AppDelegate] HotKey Edit called!!!!")
+        if popover.isShown {
+//            closePopover(sender: sender)
+        }
+    }
+    
+    @objc func hotkeyRefreshCalled() {
+        print("[AppDelegate] HotKey Refresh called!!!!")
+        if popover.isShown {
+            SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
+        }
     }
     
     // MARK: Open dialog
@@ -170,7 +176,7 @@ extension AppDelegate {
                     var isSameValue = false; //클라우드 데이터에 디바이스 값이 들어있는지 판별
                     for record in records!{
                         let value:String = record.value(forKey: "name") as! String;
-                        sharedData.workSpaceArr.append(myWorkspace.init(id:record.recordID.recordName, name:record.value(forKey: "name") as! String));
+                        sharedData.workSpaceArr.append(myWorkspace.init(id:record.recordID.recordName, name:record.value(forKey: "name") as! String, pivotDate: Date()));
                         
                         if value == sharedData.seletedWorkSpace?.name {  //디바이스에 저장된 값과 클라우드에서 가져온 값이 일치한다면
                             isSameValue = true;
@@ -178,7 +184,7 @@ extension AppDelegate {
                     }
                     
                     if !isSameValue {
-                        let workSpace = myWorkspace.init(id:(records![0].recordID.recordName) , name:records![0].value(forKey: "name") as! String);
+                        let workSpace = myWorkspace.init(id:(records![0].recordID.recordName) , name:records![0].value(forKey: "name") as! String, pivotDate: Date());
                         sharedData.seletedWorkSpace = workSpace;
                         UserDefaults().set(workSpace.id, forKey: "seletedWorkSpaceId");
                         UserDefaults().set(workSpace.name, forKey: "seletedWorkSpaceName");
@@ -212,7 +218,7 @@ extension AppDelegate {
             }
             
             //해당 데이터를 워크스페이스 보관 배열에 넣는다.
-            let workSpace = myWorkspace.init(id: (savedRecord?.recordID.recordName)!, name: savedRecord?.value(forKey: "name") as! String);
+            let workSpace = myWorkspace.init(id: (savedRecord?.recordID.recordName)!, name: savedRecord?.value(forKey: "name") as! String, pivotDate: Date());
             UserDefaults().set(workSpace.id, forKey: "seletedWorkSpaceId");
             UserDefaults().set(workSpace.name, forKey: "seletedWorkSpaceName");
             SharedData.instance.workSpaceArr.append(workSpace);
@@ -286,6 +292,8 @@ extension AppDelegate {
             
             SharedData.instance.popViewContrllerDelegate.reloadTableAll();
             UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: AppDelegate.CLOUD_SYNC_TIME)
+            
+            SharedData.instance.popViewContrllerDelegate.setRefreshTimeLabel(text: MyWorkingListUtil.transformTimeToString(time: 0))
             NotificationCenter.default.post(name: .closeProgress, object: nil)
         };
     }

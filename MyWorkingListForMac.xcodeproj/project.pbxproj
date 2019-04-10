@@ -27,6 +27,7 @@
 		178D9785217C41FA004F0B22 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D9784217C41FA004F0B22 /* IndicatorView.swift */; };
 		17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C92D622206DB03004BC322 /* WorkspaceViewController.swift */; };
 		17C92D652206DB03004BC322 /* WorkspaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17C92D632206DB03004BC322 /* WorkspaceViewController.xib */; };
+		17DF4DF8225C8D83008591E8 /* MyWorkingListUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DF4DF7225C8D83008591E8 /* MyWorkingListUtil.swift */; };
 		27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */; };
 		D469781BEB7B151C2A513B36 /* Pods_MyWorkingListForMacTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */; };
 /* End PBXBuildFile section */
@@ -105,6 +106,7 @@
 		178D9784217C41FA004F0B22 /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		17C92D622206DB03004BC322 /* WorkspaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceViewController.swift; sourceTree = "<group>"; };
 		17C92D632206DB03004BC322 /* WorkspaceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkspaceViewController.xib; sourceTree = "<group>"; };
+		17DF4DF7225C8D83008591E8 /* MyWorkingListUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkingListUtil.swift; sourceTree = "<group>"; };
 		50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWorkingListForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E662CAF3E536D7BBB114A6 /* Pods-MyWorkingListForMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.release.xcconfig"; sourceTree = "<group>"; };
 		93BFA80BB52D8DE1620694E9 /* Pods-MyWorkingListForMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.debug.xcconfig"; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				178D974F216C74C6004F0B22 /* NotificationCustom.swift */,
 				178D9748216C6DA5004F0B22 /* SharedData.swift */,
 				17686FB3215F508B007C5146 /* EventMonitor.swift */,
+				17DF4DF7225C8D83008591E8 /* MyWorkingListUtil.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -495,6 +498,7 @@
 				178D974E216C6DEB004F0B22 /* myTask.swift in Sources */,
 				17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */,
 				178D974D216C6DEB004F0B22 /* myWorkspace.swift in Sources */,
+				17DF4DF8225C8D83008591E8 /* MyWorkingListUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
