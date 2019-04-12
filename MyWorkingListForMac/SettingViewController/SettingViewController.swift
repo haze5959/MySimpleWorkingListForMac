@@ -37,6 +37,7 @@ enum hotKeyEnum: String {
 class SettingViewController: NSViewController {
     let disposeBag = DisposeBag();
     static let POPOVER_SCREEN_SIZE = "popOverScreenSize"
+    static let AUTO_UPDATE_TIME = "autoUpdateTime"
     @IBOutlet weak var syncTimeLabel: NSTextField!
     @IBOutlet weak var icloudOwnerLabel: NSTextField!
     
@@ -46,6 +47,7 @@ class SettingViewController: NSViewController {
     @IBOutlet weak var smallRadioBtn: NSButton!
     @IBOutlet weak var mediumRadioBtn: NSButton!
     @IBOutlet weak var largeRadioBtn: NSButton!
+    @IBOutlet weak var autoUpdateTimeInterval: NSTextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -139,6 +141,24 @@ class SettingViewController: NSViewController {
         let timeInterval = Date().timeIntervalSince1970 - syncTime
 
         self.syncTimeLabel.stringValue = MyWorkingListUtil.transformTimeToString(time: Int(timeInterval))
+        
+        //update time interval init
+        if UserDefaults.standard.integer(forKey: SettingViewController.AUTO_UPDATE_TIME) < 1 {
+            UserDefaults().set(5, forKey: SettingViewController.AUTO_UPDATE_TIME);
+        }
+        self.autoUpdateTimeInterval.integerValue = UserDefaults.standard.integer(forKey: SettingViewController.AUTO_UPDATE_TIME)
+        NotificationCenter.default.rx.notification(NSTextField.textDidChangeNotification, object: self.autoUpdateTimeInterval)
+            .debounce(0.5, scheduler: MainScheduler.instance)
+            .subscribe(onNext: { (notification) in
+                if self.autoUpdateTimeInterval.stringValue.count > 0, self.autoUpdateTimeInterval.integerValue < 1 {
+                    self.autoUpdateTimeInterval.integerValue = Int(SharedData.instance.popOverVC.CHANGE_UPDATE_TIME)
+                    NSSound.beep()
+                    return
+                }
+                
+                UserDefaults().set(self.autoUpdateTimeInterval.integerValue, forKey: SettingViewController.AUTO_UPDATE_TIME);
+                SharedData.instance.popOverVC.CHANGE_UPDATE_TIME = RxTimeInterval(self.autoUpdateTimeInterval.integerValue)
+            }).disposed(by: self.disposeBag)
     }
 
     @IBAction func pressCloseBtn(_ sender: Any) {

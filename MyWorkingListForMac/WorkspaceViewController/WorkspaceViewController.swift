@@ -198,6 +198,7 @@ class WorkspaceViewController: NSViewController {
             sharedData.workSpaceUpdateObserver?.onNext(sharedData.workSpaceArr[self.tableView.selectedRow])
             UserDefaults().set(SharedData.instance.seletedWorkSpace?.id, forKey: "seletedWorkSpaceId");
             UserDefaults().set(SharedData.instance.seletedWorkSpace?.name, forKey: "seletedWorkSpaceName");
+            SharedData.instance.popOverVC.editTextInit()
         }
     }
     

@@ -9,6 +9,8 @@
 import Cocoa
 import Magnet
 import CloudKit
+import RxSwift
+import RxCocoa
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -21,8 +23,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let statusItem:NSStatusItem  = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     public let popover = NSPopover()
     
+    public let updateWaitingTask = BehaviorRelay<myTask?>(value: nil)
+    let disposeBag = DisposeBag()
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         print("[AppDelegate] MyWorkingList App start!!")
+        NSApp.registerForRemoteNotifications(matching: .badge)// silent push notification!
         
         //get instance statusBar and set Btn
         if let button = self.statusItem.button {
@@ -67,10 +73,38 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         
         self.initCloud()
+        self.initUpdateTaskObserver()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
         // Insert code here to tear down your application
+    }
+    
+    func initUpdateTaskObserver() {
+        self.updateWaitingTask
+            .asObservable()
+            .subscribeOn(SerialDispatchQueueScheduler(qos: .background))
+            .subscribe { (event) in
+                guard let taskOptional = event.element else {
+                    print("No element!!")
+                    return
+                }
+                
+                guard let task = taskOptional else {
+                    print("No task!!")
+                    return
+                }
+                
+                if task.id == nil || task.id == "" {    //새로 저장
+                    //******클라우드에 새 메모 저장******
+                    self.makeDayTask(workSpaceId: (SharedData.instance.seletedWorkSpace?.id)!, taskDate: task.date, taskBody: task.body, taskTitle: task.title, index: task.index)
+                    //***********************************
+                } else { //기존 수정
+                    //******클라우드에 매모 수정******
+                    self.updateDayTask(task: task)
+                    //***********************************
+                }
+            }.disposed(by: self.disposeBag)
     }
     
     // MARK: StatusBar Btn Evnet
@@ -99,17 +133,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         togglePopover(nil)
     }
     
-    @objc func hotkeyEditCalled() {
-        print("[AppDelegate] HotKey Edit called!!!!")
-        if popover.isShown {
-//            closePopover(sender: sender)
-        }
-    }
-    
     @objc func hotkeyRefreshCalled() {
         print("[AppDelegate] HotKey Refresh called!!!!")
         if popover.isShown {
-            SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
+            if SharedData.instance.popOverVC.shouldUpdate {  //셀 업데이트
+                SharedData.instance.popOverVC.updateSelectedRow()
+            } else {    //테이블 데이터 업데이트
+                SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
+            }
         }
     }
     
@@ -161,7 +192,7 @@ extension AppDelegate {
             self.privateDB.perform(query, inZoneWith: nil) { records, error in
                 guard error == nil else {
                     print("err: \(String(describing: error))");
-                    self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Quit the app.", {
+                    self.openOneBtnDialogOK(question: "internet connection is unstable.", text: "Quit the app.", {
                         NSApplication.shared.terminate(self)    //Quit App
                     })
                     return;
@@ -195,7 +226,7 @@ extension AppDelegate {
                 }
                 
                 //클라우드 변경사항 노티 적용
-//                self.saveSubscription()
+                self.saveSubscription()
             }
         }
     }
@@ -257,15 +288,15 @@ extension AppDelegate {
     func getDayTask(startDate:Date, endDate:Date?, workSpaceId:String) -> Void {
         NotificationCenter.default.post(name: .showProgress, object: nil)
         
-        let startDateAddDay = startDate.addingTimeInterval(-86400.0);
+        let startDateAddDay = startDate.addingTimeInterval(-86400.0)
         
-        var predicate = NSPredicate(format: "workSpaceId = %@ AND date >= %@", workSpaceId, startDateAddDay as NSDate);
+        var predicate = NSPredicate(format: "workSpaceId = %@ AND date >= %@", workSpaceId, startDateAddDay as NSDate)
         if endDate != nil {
             let endDateAddDay = endDate?.addingTimeInterval(86400.0);
-            predicate = NSPredicate(format: "workSpaceId = %@ AND date >= %@ AND date <= %@", workSpaceId, startDateAddDay as NSDate, endDateAddDay! as NSDate);
+            predicate = NSPredicate(format: "workSpaceId = %@ AND date >= %@ AND date <= %@", workSpaceId, startDateAddDay as NSDate, endDateAddDay! as NSDate)
         }
         
-        let query = CKQuery(recordType: "dayTask", predicate: predicate);
+        let query = CKQuery(recordType: "dayTask", predicate: predicate)
         
         self.privateDB.perform(query, inZoneWith: nil) { records, error in
             guard error == nil else {
@@ -276,21 +307,18 @@ extension AppDelegate {
                 return;
             }
             
-            let dateFormatter = DateFormatter();
-            dateFormatter.setLocalizedDateFormatFromTemplate("yyMMdd");
-            
             for record in records!{
-                let body:String = record.value(forKey: "body") as! String;
-                let title:String = record.value(forKey: "title") as! String;
-                let date:Date = record.value(forKey: "date") as! Date;
+                let body:String = record.value(forKey: "body") as! String
+                let title:String = record.value(forKey: "title") as? String ?? ""
+                let date:Date = record.value(forKey: "date") as! Date
                 
-                let task:myTask = myTask.init(record.recordID.recordName, date, body, title);
-                let dayKey:String = dateFormatter.string(from: task.date);
+                let task:myTask = myTask(-1, record.recordID.recordName, date, body, title)
+                let dayKey:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
                 
-                SharedData.instance.taskAllDic.setValue(task, forKey: dayKey);
+                SharedData.instance.taskAllDic.setValue(task, forKey: dayKey)
             }
             
-            SharedData.instance.popViewContrllerDelegate.reloadTableAll();
+            SharedData.instance.popViewContrllerDelegate.reloadTableAll()
             UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: AppDelegate.CLOUD_SYNC_TIME)
             
             SharedData.instance.popViewContrllerDelegate.setRefreshTimeLabel(text: MyWorkingListUtil.transformTimeToString(time: 0))
@@ -309,31 +337,30 @@ extension AppDelegate {
         record.setValue(taskTitle, forKey: "title");
         self.privateDB.save(record) { savedRecord, error in
             guard error == nil else {
-                print("err: \(String(describing: error))");
+                print("err: \(String(describing: error))")
                 self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
                     self.makeDayTask(workSpaceId: workSpaceId, taskDate: taskDate, taskBody: taskBody, taskTitle: taskTitle, index: index)
                 })
-                return;
+                return
             }
             
             //해당 데이터를 워크스페이스 보관 배열에 넣는다.
-            let task = myTask.init((savedRecord?.recordID.recordName)!, savedRecord?.value(forKey: "date") as! Date, savedRecord?.value(forKey: "body") as! String, savedRecord?.value(forKey: "title") as? String);
+            let task = myTask(index, (savedRecord?.recordID.recordName)!, savedRecord?.value(forKey: "date") as! Date, savedRecord?.value(forKey: "body") as! String, savedRecord?.value(forKey: "title") as? String)
             
-            let dateFormatter = DateFormatter();
-            dateFormatter.setLocalizedDateFormatFromTemplate("yyMMdd");
-            let dayKey:String = dateFormatter.string(from: task.date);
+            let dayKey:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
             
-            SharedData.instance.taskAllDic.setValue(task, forKey: dayKey);
+            SharedData.instance.taskAllDic.setValue(task, forKey: dayKey)
             
             NotificationCenter.default.post(name: .closeProgress, object: nil)
             
             SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: index, title: taskTitle!, body: taskBody)
+//            SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
         }
         //***********************************
     }
     
     // 테스크 수정
-    func updateDayTask(task:myTask, index:Int) -> Void {
+    func updateDayTask(task:myTask) -> Void {
         //*********클라우드에 테스크 수정*********
         NotificationCenter.default.post(name: .showProgress, object: nil)
         let recordId = CKRecord.ID(recordName: task.id)
@@ -341,7 +368,7 @@ extension AppDelegate {
             guard error == nil else {
                 print("err: \(String(describing: error))");
                 self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
-                    self.updateDayTask(task: task, index: index)
+                    self.updateDayTask(task: task)
                 })
                 return;
             }
@@ -354,7 +381,8 @@ extension AppDelegate {
             self.privateDB.save(updatedRecord!) { savedRecord, error in
                 NotificationCenter.default.post(name: .closeProgress, object: nil)
                 
-                SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: index, title: task.title!, body: task.body);
+                SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: task.index, title: task.title!, body: task.body);
+//                SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
             }
         }
         //***********************************
@@ -377,9 +405,6 @@ extension AppDelegate {
                 })
                 return;
             }
-            
-            let dateFormatter = DateFormatter();
-            dateFormatter.setLocalizedDateFormatFromTemplate("yyMMdd");
             
             let dispatchGroup = DispatchGroup()
             for record in records!{
@@ -421,43 +446,43 @@ extension AppDelegate {
     // MARK: ==============================
     
     // MARK: - Notification related cloud
-//    public func saveSubscription() {
-//        // RecordType specifies the type of the record
-//        let subscriptionID = "cloudkit-recordType-changes"
-//        // Let's keep a local flag handy to avoid saving the subscription more than once.
-//        // Even if you try saving the subscription multiple times, the server doesn't save it more than once
-//        // Nevertheless, let's save some network operation and conserve resources
-//        let subscriptionSaved = UserDefaults.standard.bool(forKey: subscriptionID)
-//        guard !subscriptionSaved else {
-//            return
-//        }
-//
-//        // Subscribing is nothing but saving a query which the server would use to generate notifications.
-//        // The below predicate (query) will raise a notification for all changes.
-//        let predicate = NSPredicate(value: true)
-//        let subscription = CKQuerySubscription(recordType: "dayTask",
-//                                               predicate: predicate,
-//                                               subscriptionID: subscriptionID,
-//                                               options: [.firesOnRecordCreation, .firesOnRecordDeletion, .firesOnRecordUpdate])
-//
-//        let notificationInfo = CKSubscription.NotificationInfo()
-//        // Set shouldSendContentAvailable to true for receiving silent pushes
-//        // Silent notifications are not shown to the user and don’t require the user's permission.
-//        notificationInfo.shouldSendContentAvailable = true
-//        subscription.notificationInfo = notificationInfo
-//
-//        // Use CKModifySubscriptionsOperation to save the subscription to CloudKit
-//        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: [])
-//        operation.modifySubscriptionsCompletionBlock = { (_, _, error) in
-//            guard error == nil else {
-//                return
-//            }
-//            UserDefaults.standard.set(true, forKey: subscriptionID)
-//        }
-//
-//        // Add the operation to the corresponding private or public database
-//        self.privateDB.add(operation)
-//    }
+    public func saveSubscription() {
+        // RecordType specifies the type of the record
+        let subscriptionID = "cloudkit-recordType-changes"
+        // Let's keep a local flag handy to avoid saving the subscription more than once.
+        // Even if you try saving the subscription multiple times, the server doesn't save it more than once
+        // Nevertheless, let's save some network operation and conserve resources
+        let subscriptionSaved = UserDefaults.standard.bool(forKey: subscriptionID)
+        guard !subscriptionSaved else {
+            return
+        }
+
+        // Subscribing is nothing but saving a query which the server would use to generate notifications.
+        // The below predicate (query) will raise a notification for all changes.
+        let predicate = NSPredicate(value: true)
+        let subscription = CKQuerySubscription(recordType: "dayTask",
+                                               predicate: predicate,
+                                               subscriptionID: subscriptionID,
+                                               options: [CKQuerySubscription.Options.firesOnRecordCreation, CKQuerySubscription.Options.firesOnRecordDeletion, CKQuerySubscription.Options.firesOnRecordUpdate])
+
+        let notificationInfo = CKSubscription.NotificationInfo()
+        // Set shouldSendContentAvailable to true for receiving silent pushes
+        // Silent notifications are not shown to the user and don’t require the user's permission.
+        notificationInfo.shouldSendContentAvailable = true
+        subscription.notificationInfo = notificationInfo
+
+        // Use CKModifySubscriptionsOperation to save the subscription to CloudKit
+        let operation = CKModifySubscriptionsOperation(subscriptionsToSave: [subscription], subscriptionIDsToDelete: [])
+        operation.modifySubscriptionsCompletionBlock = { (_, _, error) in
+            guard error == nil else {
+                return
+            }
+            UserDefaults.standard.set(true, forKey: subscriptionID)
+        }
+
+        // Add the operation to the corresponding private or public database
+        self.privateDB.add(operation)
+    }
     
     func application(_ application: NSApplication, didReceiveRemoteNotification userInfo: [String : Any]) {
         // Whenever there's a remote notification, this gets called
