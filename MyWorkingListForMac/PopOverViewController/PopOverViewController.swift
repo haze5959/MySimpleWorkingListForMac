@@ -350,7 +350,7 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         let task = self.taskData[row]
         if (task.body != nil) && (task.body != "") {    // 본문이 있을 경우
-            return 100
+            return 145
         } else {
             return 22
         }
@@ -399,6 +399,15 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
             if taskDateForTodayCheck == todayDateForTodayCheck {  //오늘이라면
                 dateText = "\(taskDate) [\(dayOfWeek)] - today!"
                 cell.titleLabel?.backgroundColor = NSColor.init(red: 255/255, green: 224/255, blue: 178/255, alpha: 1)
+                tableView.scrollRowToVisible(row)   //금일이었을 경우 바로 해당 셀이 보일 수 있게
+                self.selectedRow = row
+                
+                DispatchQueue.main.async {
+                    let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
+                    self.editedDateLabel.stringValue = "\(editedDateStr) \(dayOfWeek)"
+                    self.editTitleLabel.stringValue = task.title ?? ""
+                    self.textView.string = task.body
+                }
             } else {
                 let weekDay = Calendar.current.component(Calendar.Component.weekday, from: task.date)
                 if weekDay == 1 {   //일요일이라면
