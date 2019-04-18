@@ -1,24 +1,18 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "idiom" : "mac",
+      "filename" : "StatusBar~mac@1x.png"
     },
     {
-      "idiom" : "universal",
-      "filename" : "EMOTICON.png",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "scale" : "2x",
+      "idiom" : "mac",
+      "filename" : "StatusBar~mac@2x.png"
     }
   ],
   "info" : {
     "version" : 1,
     "author" : "xcode"
-  },
-  "properties" : {
-    "template-rendering-intent" : "template"
   }
 }
