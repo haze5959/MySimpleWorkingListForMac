@@ -20,8 +20,10 @@ class SharedData: NSObject {
     var popViewContrllerDelegate:PopOverViewControllerDelegate!;
     
     override init() {
-        if UserDefaults().object(forKey: "seletedWorkSpaceId") != nil && UserDefaults().object(forKey: "seletedWorkSpaceName") != nil {
-            self.seletedWorkSpace = myWorkspace(id: UserDefaults().object(forKey: "seletedWorkSpaceId") as! String, name: UserDefaults().object(forKey: "seletedWorkSpaceName") as! String, pivotDate: Date());
+        if let seletedWorkSpaceId = UserDefaults().object(forKey: "seletedWorkSpaceId") as? String,
+            let seletedWorkSpaceName = UserDefaults().object(forKey: "seletedWorkSpaceName") as? String,
+            let seletedWorkSpaceDateType = UserDefaults().object(forKey: "seletedWorkSpaceDateType") as? Int {
+            self.seletedWorkSpace = myWorkspace(id: seletedWorkSpaceId, name: seletedWorkSpaceName, dateType: DateType(rawValue: seletedWorkSpaceDateType)!, pivotDate: Date())
         }
     }
 }

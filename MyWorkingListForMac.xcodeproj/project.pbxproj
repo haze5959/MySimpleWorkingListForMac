@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -29,6 +29,7 @@
 		17C92D652206DB03004BC322 /* WorkspaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17C92D632206DB03004BC322 /* WorkspaceViewController.xib */; };
 		17DF4DF8225C8D83008591E8 /* MyWorkingListUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DF4DF7225C8D83008591E8 /* MyWorkingListUtil.swift */; };
 		27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */; };
+		3CE74FC6232203A40053F493 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE74FC5232203A40053F493 /* StoreKit.framework */; };
 		D469781BEB7B151C2A513B36 /* Pods_MyWorkingListForMacTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +108,7 @@
 		17C92D622206DB03004BC322 /* WorkspaceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkspaceViewController.swift; sourceTree = "<group>"; };
 		17C92D632206DB03004BC322 /* WorkspaceViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WorkspaceViewController.xib; sourceTree = "<group>"; };
 		17DF4DF7225C8D83008591E8 /* MyWorkingListUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkingListUtil.swift; sourceTree = "<group>"; };
+		3CE74FC5232203A40053F493 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWorkingListForMac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		62E662CAF3E536D7BBB114A6 /* Pods-MyWorkingListForMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.release.xcconfig"; sourceTree = "<group>"; };
 		93BFA80BB52D8DE1620694E9 /* Pods-MyWorkingListForMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.debug.xcconfig"; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CE74FC6232203A40053F493 /* StoreKit.framework in Frameworks */,
 				27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */,
 				178D9752216C9ED5004F0B22 /* CloudKit.framework in Frameworks */,
 			);
@@ -262,6 +265,7 @@
 		AE17C38939598A30C6DED22D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3CE74FC5232203A40053F493 /* StoreKit.framework */,
 				178D9751216C9ED5004F0B22 /* CloudKit.framework */,
 				50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */,
 				EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */,
@@ -323,6 +327,9 @@
 					178D82072144E8CF00B1E796 = {
 						CreatedOnToolsVersion = 9.4.1;
 						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
 							com.apple.Push = {
 								enabled = 1;
 							};
@@ -444,23 +451,16 @@
 			buildActionMask = 2147483647;
 			files = (
 			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/KeyHolder/KeyHolder.framework",
-				"${BUILT_PRODUCTS_DIR}/Magnet/Magnet.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KeyHolder.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Magnet.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D8B414E378F8D41344B34966 /* [CP] Check Pods Manifest.lock */ = {
@@ -692,8 +692,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyWorkingListForMac/MyWorkingListForMac.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer: OGyu kwon (GM9445BKN6)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z97K7ZHNKX;
 				INFOPLIST_FILE = MyWorkingListForMac/Info.plist;
@@ -703,7 +703,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "MyWorkingListForMac Dev 2018";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
@@ -714,8 +714,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyWorkingListForMac/MyWorkingListForMac.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer: OGyu kwon (GM9445BKN6)";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z97K7ZHNKX;
 				INFOPLIST_FILE = MyWorkingListForMac/Info.plist;

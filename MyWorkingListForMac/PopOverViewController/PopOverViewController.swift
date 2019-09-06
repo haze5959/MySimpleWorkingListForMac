@@ -15,7 +15,7 @@ public protocol PopOverViewControllerDelegate {
     /**
      하나의 셀 업데이트
      */
-    func reloadTableWithUpdateCell(index:Int, title:String, body:String) -> Void;
+    func reloadTableWithUpdateCell(index:Int, body:String) -> Void;
     
     /**
      모든 셀 업데이트
@@ -32,7 +32,6 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet var textView: NSTextView!
     @IBOutlet weak var editedDateLabel: NSTextField!
-    @IBOutlet weak var editTitleLabel: NSTextField!
     @IBOutlet weak var textScrollView: NSScrollView!
     @IBOutlet weak public var taskScrollViewHeight: NSLayoutConstraint!
     @IBOutlet weak var editViewHeight: NSLayoutConstraint!
@@ -76,11 +75,10 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     
     // MARK: ==============================
     // MARK: PopOverViewControllerDelegate
-    func reloadTableWithUpdateCell(index:Int, title:String, body:String) {
+    func reloadTableWithUpdateCell(index:Int, body:String) {
         if index != -1 {
             //해당 셀 데이터 업데이트
             let task = self.taskData[index]
-            task.title = title;
             task.body = body;
             
             DispatchQueue.main.async {
@@ -101,7 +99,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
             let dayTask:myTask! = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask;
             
             if (dayTask != nil) {
-                self.taskData[index] = myTask.init(dayTask.index, dayTask.id, self.taskData[index].date, dayTask.body, dayTask.title);
+                self.taskData[index] = myTask.init(dayTask.index, dayTask.id, self.taskData[index].date, dayTask.body);
             }
         }
         
@@ -274,9 +272,39 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         self.indicatorView.stop()
     }
     
-    /**
-     테이블 뷰 데이터 초기화
-     */
+    //초기화 구문
+    func editTextInit() {
+        self.selectedRow = PopOverViewController.NOT_SELECTED
+        self.editedDateLabel.stringValue = "Not seleted"
+        self.textView.string = ""
+    }
+    
+    func updateSelectedRow() {
+        if self.shouldUpdate {
+            self.autoUpdateBtn.isHidden = true
+            self.autoUpdateTimer?.dispose()
+            
+            self.shouldUpdate = false
+            let task = self.taskData[self.selectedRow]
+            task.body = self.textView.string
+            
+            let indexSet = IndexSet.init(integer: self.selectedRow)
+            
+            self.tableView.beginUpdates()
+            self.tableView.removeRows(at: indexSet, withAnimation: .effectFade)
+            self.tableView.insertRows(at: indexSet, withAnimation: .effectFade)
+            self.tableView.endUpdates()
+            
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            appDelegate.updateWaitingTask.accept(task)
+            self.autoUpdateBtn.isHidden = true
+        }
+    }
+}
+
+// MARK: 데이터 초기화
+extension PopOverViewController {
+    // MARK: Day init
     func initTaskData(pivotDate:Date!) -> Void {
         self.datePicker.dateValue = pivotDate
         
@@ -297,44 +325,14 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
             let dayTask:myTask? = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask;
             
             if (dayTask != nil) {
-                self.taskData.append(myTask(i, dayTask!.id, date, dayTask!.body, dayTask!.title));
+                self.taskData.append(myTask(i, dayTask!.id, date, dayTask!.body));
             } else {
-                self.taskData.append(myTask(i ,"", date, "", nil));
+                self.taskData.append(myTask(i ,"", date, ""));
             }
         }
     }
-    
-    //초기화 구문
-    func editTextInit() {
-        self.selectedRow = PopOverViewController.NOT_SELECTED
-        self.editedDateLabel.stringValue = "Not seleted"
-        self.editTitleLabel.stringValue = ""
-        self.textView.string = ""
-    }
-    
-    func updateSelectedRow() {
-        if self.shouldUpdate {
-            self.autoUpdateBtn.isHidden = true
-            self.autoUpdateTimer?.dispose()
-            
-            self.shouldUpdate = false
-            let task = self.taskData[self.selectedRow]
-            task.title = self.editTitleLabel.stringValue
-            task.body = self.textView.string
-            
-            let indexSet = IndexSet.init(integer: self.selectedRow)
-            
-            self.tableView.beginUpdates()
-            self.tableView.removeRows(at: indexSet, withAnimation: .effectFade)
-            self.tableView.insertRows(at: indexSet, withAnimation: .effectFade)
-            self.tableView.endUpdates()
-            
-            let appDelegate = NSApplication.shared.delegate as! AppDelegate
-            appDelegate.updateWaitingTask.accept(task)
-            self.autoUpdateBtn.isHidden = true
-        }
-    }
 }
+    
 
 // MARK: TableView
 extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
@@ -369,7 +367,6 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
             let dateEEE:String = dayKeyFormatter.string(from: task.date)
             let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
             self.editedDateLabel.stringValue = "\(editedDateStr) \(dateEEE)"
-            self.editTitleLabel.stringValue = task.title ?? ""
             self.textView.string = task.body
         }
         
@@ -405,7 +402,6 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
                 DispatchQueue.main.async {
                     let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
                     self.editedDateLabel.stringValue = "\(editedDateStr) \(dayOfWeek)"
-                    self.editTitleLabel.stringValue = task.title ?? ""
                     self.textView.string = task.body
                 }
             } else {
@@ -420,10 +416,6 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
             }
             
             cell.titleLabel?.stringValue = dateText
-            
-            if (task.title != nil && task.title!.count > 0) {
-                cell.titleLabel?.stringValue.append(" \(task.title!)")
-            }
             
             cell.textField?.stringValue = task.body
             
@@ -454,7 +446,6 @@ extension PopOverViewController {
     func setDidChangeTextViewNoti() {
         //다른 셀 선택, 워크스페이스 변경 등으로 CHANGE_UPDATE_TIME을 기다릴 필요없이 바로 업데이트를 했을 경우를 판별하기 위한 변수 설정
         Observable.merge(
-            NotificationCenter.default.rx.notification(NSTextField.textDidChangeNotification, object: self.editTitleLabel),
             NotificationCenter.default.rx.notification(NSText.didChangeNotification, object: self.textView)
             ).subscribe({ notification in
             if self.selectedRow != PopOverViewController.NOT_SELECTED {

@@ -97,7 +97,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 
                 if task.id == nil || task.id == "" {    //새로 저장
                     //******클라우드에 새 메모 저장******
-                    self.makeDayTask(workSpaceId: (SharedData.instance.seletedWorkSpace?.id)!, taskDate: task.date, taskBody: task.body, taskTitle: task.title, index: task.index)
+                    self.makeDayTask(workSpaceId: (SharedData.instance.seletedWorkSpace?.id)!, taskDate: task.date, taskBody: task.body, index: task.index)
                     //***********************************
                 } else { //기존 수정
                     //******클라우드에 매모 수정******
@@ -206,16 +206,18 @@ extension AppDelegate {
                     
                     var isSameValue = false; //클라우드 데이터에 디바이스 값이 들어있는지 판별
                     for record in records!{
-                        let value:String = record.value(forKey: "name") as! String;
-                        sharedData.workSpaceArr.append(myWorkspace.init(id:record.recordID.recordName, name:record.value(forKey: "name") as! String, pivotDate: Date()));
+                        let name:String = record.value(forKey: "name") as! String;
+                        let workSpaceDateType = record.value(forKey: "dateType") as! Int
+                        sharedData.workSpaceArr.append(myWorkspace.init(id:record.recordID.recordName, name:name, dateType: DateType(rawValue: workSpaceDateType)!, pivotDate: Date()));
                         
-                        if value == sharedData.seletedWorkSpace?.name {  //디바이스에 저장된 값과 클라우드에서 가져온 값이 일치한다면
+                        if name == sharedData.seletedWorkSpace?.name {  //디바이스에 저장된 값과 클라우드에서 가져온 값이 일치한다면
                             isSameValue = true;
                         }
                     }
                     
                     if !isSameValue {
-                        let workSpace = myWorkspace.init(id:(records![0].recordID.recordName) , name:records![0].value(forKey: "name") as! String, pivotDate: Date());
+                        let workSpaceDateType = records![0].value(forKey: "dateType") as! Int
+                        let workSpace = myWorkspace.init(id:(records![0].recordID.recordName) , name:records![0].value(forKey: "name") as! String, dateType: DateType(rawValue: workSpaceDateType)!, pivotDate: Date());
                         sharedData.seletedWorkSpace = workSpace;
                         UserDefaults().set(workSpace.id, forKey: "seletedWorkSpaceId");
                         UserDefaults().set(workSpace.name, forKey: "seletedWorkSpaceName");
@@ -249,7 +251,8 @@ extension AppDelegate {
             }
             
             //해당 데이터를 워크스페이스 보관 배열에 넣는다.
-            let workSpace = myWorkspace.init(id: (savedRecord?.recordID.recordName)!, name: savedRecord?.value(forKey: "name") as! String, pivotDate: Date());
+            let workSpaceDateType = record.value(forKey: "dateType") as! Int
+            let workSpace = myWorkspace.init(id: (savedRecord?.recordID.recordName)!, name: savedRecord?.value(forKey: "name") as! String, dateType: DateType(rawValue: workSpaceDateType)!, pivotDate: Date());
             UserDefaults().set(workSpace.id, forKey: "seletedWorkSpaceId");
             UserDefaults().set(workSpace.name, forKey: "seletedWorkSpaceName");
             SharedData.instance.workSpaceArr.append(workSpace);
@@ -304,15 +307,14 @@ extension AppDelegate {
                 self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
                     self.getDayTask(startDate: startDate, endDate: endDate, workSpaceId: workSpaceId)
                 })
-                return;
+                return
             }
             
-            for record in records!{
+            for record in records! {
                 let body:String = record.value(forKey: "body") as! String
-                let title:String = record.value(forKey: "title") as? String ?? ""
                 let date:Date = record.value(forKey: "date") as! Date
                 
-                let task:myTask = myTask(-1, record.recordID.recordName, date, body, title)
+                let task:myTask = myTask(-1, record.recordID.recordName, date, body)
                 let dayKey:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
                 
                 SharedData.instance.taskAllDic.setValue(task, forKey: dayKey)
@@ -327,25 +329,24 @@ extension AppDelegate {
     }
     
     // 테스크 생성
-    func makeDayTask(workSpaceId:String, taskDate:Date, taskBody:String, taskTitle:String?, index:Int) -> Void {
+    func makeDayTask(workSpaceId:String, taskDate:Date, taskBody:String, index:Int) -> Void {
         //*********클라우드에 새 테스크 저장*********
         NotificationCenter.default.post(name: .showProgress, object: nil)
         let record = CKRecord(recordType: "dayTask");
         record.setValue(workSpaceId, forKey: "workSpaceId");
         record.setValue(taskDate, forKey: "date");
         record.setValue(taskBody, forKey: "body");
-        record.setValue(taskTitle, forKey: "title");
         self.privateDB.save(record) { savedRecord, error in
             guard error == nil else {
                 print("err: \(String(describing: error))")
                 self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
-                    self.makeDayTask(workSpaceId: workSpaceId, taskDate: taskDate, taskBody: taskBody, taskTitle: taskTitle, index: index)
+                    self.makeDayTask(workSpaceId: workSpaceId, taskDate: taskDate, taskBody: taskBody, index: index)
                 })
                 return
             }
             
             //해당 데이터를 워크스페이스 보관 배열에 넣는다.
-            let task = myTask(index, (savedRecord?.recordID.recordName)!, savedRecord?.value(forKey: "date") as! Date, savedRecord?.value(forKey: "body") as! String, savedRecord?.value(forKey: "title") as? String)
+            let task = myTask(index, (savedRecord?.recordID.recordName)!, savedRecord?.value(forKey: "date") as! Date, savedRecord?.value(forKey: "body") as! String)
             
             let dayKey:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
             
@@ -353,7 +354,7 @@ extension AppDelegate {
             
             NotificationCenter.default.post(name: .closeProgress, object: nil)
             
-            SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: index, title: taskTitle!, body: taskBody)
+            SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: index, body: taskBody)
 //            SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
         }
         //***********************************
@@ -373,15 +374,11 @@ extension AppDelegate {
                 return;
             }
             
-            if task.title != nil {
-                updatedRecord?.setObject(task.title! as CKRecordValue, forKey: "title");
-            }
-            
             updatedRecord?.setObject(task.body as CKRecordValue, forKey: "body");
             self.privateDB.save(updatedRecord!) { savedRecord, error in
                 NotificationCenter.default.post(name: .closeProgress, object: nil)
                 
-                SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: task.index, title: task.title!, body: task.body);
+                SharedData.instance.popViewContrllerDelegate.reloadTableWithUpdateCell(index: task.index, body: task.body);
 //                SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!)
             }
         }

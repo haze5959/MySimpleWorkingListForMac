@@ -136,7 +136,7 @@ class WorkspaceViewController: NSViewController {
                 //******클라우드에 새 워크스페이즈 저장******
                 appDelegate.updateWorkSpace(recordId: sharedData.workSpaceArr[self.tableView.selectedRow].id, newName: txt.stringValue)
                 //***********************************
-                sharedData.workSpaceArr[self.tableView.selectedRow] = myWorkspace(id: sharedData.workSpaceArr[self.tableView.selectedRow].id, name: txt.stringValue, pivotDate: Date())
+                sharedData.workSpaceArr[self.tableView.selectedRow] = myWorkspace(id: sharedData.workSpaceArr[self.tableView.selectedRow].id, name: txt.stringValue, dateType: sharedData.workSpaceArr[self.tableView.selectedRow].dateType, pivotDate: Date())
                 
                 //선택된 워크스페이스랑 똑같은 워크스페이스를 선택했다면
                 if sharedData.workSpaceArr[self.tableView.selectedRow].id == sharedData.seletedWorkSpace?.id {
@@ -176,7 +176,8 @@ class WorkspaceViewController: NSViewController {
             
             for record in records!{
                 let workSpaceName:String = record.value(forKey: "name") as! String
-                sharedData.workSpaceArr.append(myWorkspace.init(id:record.recordID.recordName, name:workSpaceName, pivotDate: Date()))
+                let workSpaceDateType = record.value(forKey: "dateType") as! Int
+                sharedData.workSpaceArr.append(myWorkspace.init(id:record.recordID.recordName, name:workSpaceName, dateType: DateType(rawValue: workSpaceDateType)!, pivotDate: Date()))
             }
             
             DispatchQueue.main.async {
