@@ -11,6 +11,7 @@ import KeyHolder
 import Magnet
 import RxCocoa
 import RxSwift
+import LaunchAtLogin
 
 enum popOverScreenSize: Int {
     case small
@@ -48,9 +49,27 @@ class SettingViewController: NSViewController {
     @IBOutlet weak var mediumRadioBtn: NSButton!
     @IBOutlet weak var largeRadioBtn: NSButton!
     @IBOutlet weak var autoUpdateTimeInterval: NSTextField!
+    @IBOutlet weak var launchLoginAppCheckBox: NSButton!
+    
+    private let disposedBag: DisposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("LaunchAtLogin: \(LaunchAtLogin.isEnabled)")
+        self.launchLoginAppCheckBox.state = UserDefaults().bool(forKey: "LaunchAtLogin") ? .on : .off
+        
+        self.launchLoginAppCheckBox.rx.tap.subscribe { (event) in
+            if self.launchLoginAppCheckBox.state == .on {
+                LaunchAtLogin.isEnabled = true
+                UserDefaults().set(true, forKey: "LaunchAtLogin")
+            } else {
+                LaunchAtLogin.isEnabled = false
+                UserDefaults().set(false, forKey: "LaunchAtLogin")
+            }
+            
+            print("LaunchAtLogin: \(LaunchAtLogin.isEnabled)")
+        }.disposed(by: self.disposeBag)
+        
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         appDelegate.eventMonitor?.stop()
         

@@ -70,8 +70,10 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     
     let disposeBag = DisposeBag()
     
-    let EDIT_VIEW_HEIGHT = 100
+    let EDIT_VIEW_HEIGHT = 150
     let TIMER_CHECK_REFRESH_INTERVAL: RxTimeInterval = 100 //100초마다 체크
+    
+    var isDarkMode = false
     
     // MARK: ==============================
     // MARK: PopOverViewControllerDelegate
@@ -118,6 +120,15 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     // MARK: viewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if self.view.isDarkMode {
+            self.isDarkMode = true
+            self.extendBtn.image = #imageLiteral(resourceName: "expanding_arrow_white")
+        } else {
+            self.isDarkMode = false
+            self.extendBtn.image = #imageLiteral(resourceName: "expanding_arrow")
+        }
+        
         self.textView.allowsUndo = true
         self.autoUpdateBtn.isHidden = true
         if UserDefaults.standard.integer(forKey: SettingViewController.AUTO_UPDATE_TIME) > 0 {
@@ -157,11 +168,29 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
                 self.taskData.removeAll()
                 SharedData.instance.taskAllDic.removeAllObjects()
                 
-                //날짜 그리기
-                if  (($0.element?.pivotDate) != nil) {
-                    self.initTaskData(pivotDate: $0.element?.pivotDate)
-                } else {
-                    self.initTaskData(pivotDate: Date())
+                guard let workSpace = $0.element else {
+                    return
+                }
+                
+                switch workSpace.dateType! {
+                case .day:
+                    if  ((workSpace.pivotDate) != nil) {
+                        self.initTaskData(pivotDate: workSpace.pivotDate)
+                    } else {
+                        self.initTaskData(pivotDate: Date())
+                    }
+                case .week:
+                    if  ((workSpace.pivotDate) != nil) {
+                        self.initTaskDataForWeek(pivotDate: workSpace.pivotDate)
+                    } else {
+                        self.initTaskDataForWeek(pivotDate: Date())
+                    }
+                case .month:
+                    if  ((workSpace.pivotDate) != nil) {
+                        self.initTaskDataForMonth(pivotDate: workSpace.pivotDate)
+                    } else {
+                        self.initTaskDataForMonth(pivotDate: Date())
+                    }
                 }
                 
                 //클라우드에서 일일데이터를 가져오고 테이블 리로드
@@ -210,7 +239,11 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
                 self.taskScrollViewHeight.animator().constant = size
                 self.editViewHeight.animator().constant = CGFloat(self.EDIT_VIEW_HEIGHT)
             }) {
-                self.extendBtn.image = NSImage.init(named: NSImage.enterFullScreenTemplateName)
+                if self.isDarkMode {
+                    self.extendBtn.image = #imageLiteral(resourceName: "expanding_arrow_white")
+                } else {
+                    self.extendBtn.image = #imageLiteral(resourceName: "expanding_arrow")
+                }
             }
             
         } else {
@@ -221,7 +254,11 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
                 self.taskScrollViewHeight.animator().constant = CGFloat(self.EDIT_VIEW_HEIGHT)
                 self.editViewHeight.animator().constant = size
             }) {
-                self.extendBtn.image = NSImage.init(named: NSImage.exitFullScreenTemplateName)
+                if self.isDarkMode {
+                    self.extendBtn.image = #imageLiteral(resourceName: "collapse_arrow_white")
+                } else {
+                    self.extendBtn.image = #imageLiteral(resourceName: "collapse_arrow")
+                }
                 self.tableView.scrollRowToVisible(self.selectedRow)
             }
         }
@@ -315,12 +352,72 @@ extension PopOverViewController {
         //해당 달의 시작일을 구하는 로직
         let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.startOfDay(for: pivotDate)))!
         
+        let dayKeyFormatter = DateFormatter()
+        dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyMMdd")
+        
         //과거로부터 현재 미래까지
         for i in 0..<days.count {
             let date:Date = (Calendar.current.date(byAdding: .day, value: i, to: startOfMonth))!;
             
             //*********dayKey 생성***********
-            let dayKey:String = DateFormatter.localizedString(from: date, dateStyle: .short, timeStyle: .none)
+            let dayKey:String = dayKeyFormatter.string(from: date)
+            //******************************
+            let dayTask:myTask? = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask;
+            
+            if (dayTask != nil) {
+                self.taskData.append(myTask(i, dayTask!.id, date, dayTask!.body));
+            } else {
+                self.taskData.append(myTask(i ,"", date, ""));
+            }
+        }
+    }
+    
+    // MARK: Week init
+    func initTaskDataForWeek(pivotDate:Date!) -> Void {
+        self.datePicker.dateValue = pivotDate
+        
+        //달에 몇주나 있는지 가져오는 로직
+        let calendar = Calendar.current
+        let weeks = calendar.range(of: .weekOfMonth, in: .month, for: pivotDate)!
+        
+        //해당 달의 시작일을 구하는 로직
+        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.startOfDay(for: pivotDate)))!
+        let weekPivot = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: startOfMonth))!   //일요일로 변경
+        
+        let dayKeyFormatter = DateFormatter()
+        dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyMMdd")
+        
+        //과거로부터 현재 미래까지
+        for i in 0..<weeks.count {
+            let date:Date = (Calendar.current.date(byAdding: .weekOfMonth, value: i, to: weekPivot))!
+            
+            //*********dayKey 생성***********
+            let dayKey:String = dayKeyFormatter.string(from: date)
+            //******************************
+            let dayTask:myTask? = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask
+            
+            if (dayTask != nil) {
+                self.taskData.append(myTask(i, dayTask!.id, date, dayTask!.body))
+            } else {
+                self.taskData.append(myTask(i ,"", date, ""))
+            }
+        }
+    }
+    
+    // MARK: Month init
+    func initTaskDataForMonth(pivotDate:Date!) -> Void {
+        let monthPivot = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: pivotDate))!   //해당 달의 첫째날로 변경
+        self.datePicker.dateValue = monthPivot
+        
+        let dayKeyFormatter = DateFormatter()
+        dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyMMdd")
+        
+        //과거로부터 현재 미래까지
+        for i in 0..<12 {
+            let date:Date = (Calendar.current.date(byAdding: .month, value: i, to: monthPivot))!;
+            
+            //*********dayKey 생성***********
+            let dayKey:String = dayKeyFormatter.string(from: date)
             //******************************
             let dayTask:myTask? = SharedData.instance.taskAllDic.object(forKey: dayKey) as? myTask;
             
@@ -347,10 +444,18 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, heightOfRow row: Int) -> CGFloat {
         let task = self.taskData[row]
-        if (task.body != nil) && (task.body != "") {    // 본문이 있을 경우
+        
+        switch SharedData.instance.seletedWorkSpace!.dateType! {
+        case .day:
+            if (task.body != nil) && (task.body != "") {    // 본문이 있을 경우
+                return 145
+            } else {
+                return 22
+            }
+        case .week:
             return 145
-        } else {
-            return 22
+        case .month:
+            return 145
         }
     }
     
@@ -363,10 +468,28 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
         
         DispatchQueue.main.async {
             let dayKeyFormatter = DateFormatter()
-            dayKeyFormatter.setLocalizedDateFormatFromTemplate("EEEE")
-            let dateEEE:String = dayKeyFormatter.string(from: task.date)
-            let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
-            self.editedDateLabel.stringValue = "\(editedDateStr) \(dateEEE)"
+            
+            switch SharedData.instance.seletedWorkSpace!.dateType! {
+            case .day:
+                dayKeyFormatter.setLocalizedDateFormatFromTemplate("EEEE")
+                let dateEEE:String = dayKeyFormatter.string(from: task.date)
+                let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
+                self.editedDateLabel.stringValue = "\(editedDateStr) \(dateEEE)"
+                
+            case .week:
+                let weekNumber = Calendar.current.component(.weekOfMonth, from: task.date)  //첫 주는 1부터 시작
+                dayKeyFormatter.setLocalizedDateFormatFromTemplate("MM/dd")
+                let sunday = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: task.date))!
+                let sundayStr:String = dayKeyFormatter.string(from: sunday)
+                let saturday = Calendar.current.date(byAdding: .day, value: 6, to: sunday)
+                let saturdayStr:String = dayKeyFormatter.string(from: saturday!)
+            
+                self.editedDateLabel.stringValue = "\(weekNumber) Week(\(sundayStr)~\(saturdayStr))"
+            case .month:
+                dayKeyFormatter.setLocalizedDateFormatFromTemplate("yyyy/MM")
+                self.editedDateLabel.stringValue = dayKeyFormatter.string(from: task.date)
+            }
+            
             self.textView.string = task.body
         }
         
@@ -382,37 +505,78 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
         let cellIdentifier = CellIdentifiers.TaskCell
         if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: cellIdentifier), owner: self) as? CustomCellView {
             
+            let dateCompareFormatter = DateFormatter()
+            dateCompareFormatter.setLocalizedDateFormatFromTemplate("MM/dd/yyyy")
+            
             let dateFormatter = DateFormatter()
-            dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
-            let dayOfWeek:String = dateFormatter.string(from: task.date)
-            dateFormatter.setLocalizedDateFormatFromTemplate("dd")
-            let taskDate:String = dateFormatter.string(from: task.date)
-            
-            //today check
-            dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd/yyyy")
-            let taskDateForTodayCheck:String = dateFormatter.string(from: task.date)
-            let todayDateForTodayCheck:String = dateFormatter.string(from: Date())
-            
-            if taskDateForTodayCheck == todayDateForTodayCheck {  //오늘이라면
-                dateText = "\(taskDate) [\(dayOfWeek)] - today!"
-                cell.titleLabel?.backgroundColor = NSColor.init(red: 255/255, green: 224/255, blue: 178/255, alpha: 1)
-                tableView.scrollRowToVisible(row)   //금일이었을 경우 바로 해당 셀이 보일 수 있게
-                self.selectedRow = row
+            switch SharedData.instance.seletedWorkSpace!.dateType! {
+            case .day:
+                dateFormatter.setLocalizedDateFormatFromTemplate("EEEE")
+                let dayOfWeek:String = dateFormatter.string(from: task.date)
+                dateFormatter.setLocalizedDateFormatFromTemplate("dd")
+                let taskDate:String = dateFormatter.string(from: task.date)
                 
-                DispatchQueue.main.async {
-                    let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
-                    self.editedDateLabel.stringValue = "\(editedDateStr) \(dayOfWeek)"
-                    self.textView.string = task.body
-                }
-            } else {
-                let weekDay = Calendar.current.component(Calendar.Component.weekday, from: task.date)
-                if weekDay == 1 {   //일요일이라면
-                    cell.titleLabel?.backgroundColor = NSColor.init(red: 252/255, green: 228/255, blue: 236/255, alpha: 1)
+                //today check
+                let taskDateForTodayCheck:String = dateCompareFormatter.string(from: task.date)
+                let todayDateForTodayCheck:String = dateCompareFormatter.string(from: Date())
+                
+                if taskDateForTodayCheck == todayDateForTodayCheck {  //오늘이라면
+                    dateText = "\(taskDate) [\(dayOfWeek)] - today!"
+                    cell.titleLabel?.backgroundColor = NSColor.init(red: 255/255, green: 224/255, blue: 178/255, alpha: 1)
+                    tableView.scrollRowToVisible(row)   //금일이었을 경우 바로 해당 셀이 보일 수 있게
+                    self.selectedRow = row
+                    
+                    DispatchQueue.main.async {
+                        let editedDateStr:String = DateFormatter.localizedString(from: task.date, dateStyle: .short, timeStyle: .none)
+                        self.editedDateLabel.stringValue = "\(editedDateStr) \(dayOfWeek)"
+                        self.textView.string = task.body
+                    }
                 } else {
-                    cell.titleLabel?.backgroundColor = NSColor.init(red: 227/255, green: 242/255, blue: 253/255, alpha: 1)
+                    let weekDay = Calendar.current.component(Calendar.Component.weekday, from: task.date)
+                    if weekDay == 1 {   //일요일이라면
+                        cell.titleLabel?.backgroundColor = NSColor.init(red: 252/255, green: 228/255, blue: 236/255, alpha: 1)
+                    } else {
+                        cell.titleLabel?.backgroundColor = NSColor.init(red: 227/255, green: 242/255, blue: 253/255, alpha: 1)
+                    }
+                    
+                    dateText = "\(taskDate) [\(dayOfWeek)]";
                 }
+            case .week:
+                let taskDate:String = dateCompareFormatter.string(from: task.date)
                 
-                dateText = "\(taskDate) [\(dayOfWeek)]";
+                let weekNumber = Calendar.current.component(.weekOfMonth, from: task.date)  //첫 주는 1부터 시작
+                dateFormatter.setLocalizedDateFormatFromTemplate("MM/dd")
+                let sunday = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: task.date))!
+                let sundayStr:String = dateFormatter.string(from: sunday)
+                let saturday = Calendar.current.date(byAdding: .day, value: 6, to: sunday)
+                let saturdayStr:String = dateFormatter.string(from: saturday!)
+                
+                let weekPivot = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!   //일요일로 변경
+                let todayDate:String = dateCompareFormatter.string(from: weekPivot)
+                
+                if taskDate == todayDate {  //오늘이라면
+                    dateText = "\(weekNumber) Week(\(sundayStr)~\(saturdayStr)) - today!"
+                    cell.titleLabel!.backgroundColor = NSColor.init(red: 255/255, green: 224/255, blue: 178/255, alpha: 1)
+                } else {
+                    dateText = "\(weekNumber) Week(\(sundayStr)~\(saturdayStr))"
+                    cell.titleLabel!.backgroundColor = NSColor.init(red: 227/255, green: 242/255, blue: 253/255, alpha: 1)
+                }
+            case .month:
+                let taskDate:String = dateCompareFormatter.string(from: task.date)
+                
+                dateFormatter.setLocalizedDateFormatFromTemplate("yyyy/MM")
+                let monthStr:String = dateFormatter.string(from: task.date)
+                
+                let monthPivot = Calendar.current.date(from: Calendar.current.dateComponents([.year, .month], from: Date()))!   //해당 달의 첫째날로 변경
+                let todayDate:String = dateCompareFormatter.string(from: monthPivot)
+                
+                if taskDate == todayDate {  //오늘이라면
+                    dateText = "\(monthStr) - today!"
+                    cell.titleLabel!.backgroundColor = NSColor.init(red: 255/255, green: 224/255, blue: 178/255, alpha: 1)
+                } else {
+                    dateText = "\(monthStr)"
+                    cell.titleLabel!.backgroundColor = NSColor.init(red: 227/255, green: 242/255, blue: 253/255, alpha: 1)
+                }
             }
             
             cell.titleLabel?.stringValue = dateText

@@ -30,6 +30,7 @@
 		17DF4DF8225C8D83008591E8 /* MyWorkingListUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DF4DF7225C8D83008591E8 /* MyWorkingListUtil.swift */; };
 		27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */; };
 		3CE74FC6232203A40053F493 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE74FC5232203A40053F493 /* StoreKit.framework */; };
+		C370BF452326550E00E321E6 /* OQ+NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C370BF442326550E00E321E6 /* OQ+NSView.swift */; };
 		D469781BEB7B151C2A513B36 /* Pods_MyWorkingListForMacTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -49,7 +50,7 @@
 		17686FB3215F508B007C5146 /* EventMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		17686FB8215F64AD007C5146 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		17686FBA215F64CE007C5146 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingViewController.xib; sourceTree = "<group>"; };
-		178D82082144E8CF00B1E796 /* MyWorkingListForMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyWorkingListForMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		178D82082144E8CF00B1E796 /* Daily work note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Daily work note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		178D820B2144E8CF00B1E796 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		178D820D2144E8D100B1E796 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		178D82102144E8D100B1E796 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
@@ -113,6 +114,8 @@
 		62E662CAF3E536D7BBB114A6 /* Pods-MyWorkingListForMac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.release.xcconfig"; sourceTree = "<group>"; };
 		93BFA80BB52D8DE1620694E9 /* Pods-MyWorkingListForMac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac.debug.xcconfig"; sourceTree = "<group>"; };
 		B4205BB8DE04813821EC6BB5 /* Pods-MyWorkingListForMacTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMacTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMacTests/Pods-MyWorkingListForMacTests.release.xcconfig"; sourceTree = "<group>"; };
+		C32674512327610400E8FDB1 /* LaunchAtLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LaunchAtLogin.framework; path = Carthage/Build/Mac/LaunchAtLogin.framework; sourceTree = "<group>"; };
+		C370BF442326550E00E321E6 /* OQ+NSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OQ+NSView.swift"; sourceTree = "<group>"; };
 		EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWorkingListForMacTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70E51C982862CD998C642B8 /* Pods-MyWorkingListForMacTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMacTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMacTests/Pods-MyWorkingListForMacTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -183,7 +186,7 @@
 		178D82092144E8CF00B1E796 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				178D82082144E8CF00B1E796 /* MyWorkingListForMac.app */,
+				178D82082144E8CF00B1E796 /* Daily work note.app */,
 				178D82182144E8D100B1E796 /* MyWorkingListForMacTests.xctest */,
 			);
 			name = Products;
@@ -192,6 +195,7 @@
 		178D820A2144E8CF00B1E796 /* MyWorkingListForMac */ = {
 			isa = PBXGroup;
 			children = (
+				C370BF43232654EB00E321E6 /* Extensions */,
 				17C92D612206DAE8004BC322 /* WorkspaceViewController */,
 				178D975521735B09004F0B22 /* Resource */,
 				178D974A216C6DEB004F0B22 /* Model */,
@@ -265,12 +269,21 @@
 		AE17C38939598A30C6DED22D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C32674512327610400E8FDB1 /* LaunchAtLogin.framework */,
 				3CE74FC5232203A40053F493 /* StoreKit.framework */,
 				178D9751216C9ED5004F0B22 /* CloudKit.framework */,
 				50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */,
 				EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C370BF43232654EB00E321E6 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C370BF442326550E00E321E6 /* OQ+NSView.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,6 +298,8 @@
 				178D82052144E8CF00B1E796 /* Frameworks */,
 				178D82062144E8CF00B1E796 /* Resources */,
 				31CBE9C30D38189739FE1647 /* [CP] Embed Pods Frameworks */,
+				C32674532327615200E8FDB1 /* ShellScript */,
+				C3267458232764D000E8FDB1 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -292,7 +307,7 @@
 			);
 			name = MyWorkingListForMac;
 			productName = MyWorkingListForMac;
-			productReference = 178D82082144E8CF00B1E796 /* MyWorkingListForMac.app */;
+			productReference = 178D82082144E8CF00B1E796 /* Daily work note.app */;
 			productType = "com.apple.product-type.application";
 		};
 		178D82172144E8D100B1E796 /* MyWorkingListForMacTests */ = {
@@ -463,6 +478,41 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		C32674532327615200E8FDB1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/Mac/LaunchAtLogin.framework",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
+		};
+		C3267458232764D000E8FDB1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PROJECT_DIR}/Carthage/Build/Mac/LaunchAtLogin.framework/Resources/copy-helper.sh\n";
+		};
 		D8B414E378F8D41344B34966 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -497,6 +547,7 @@
 				17686FB9215F64AD007C5146 /* SettingViewController.swift in Sources */,
 				178D974E216C6DEB004F0B22 /* myTask.swift in Sources */,
 				17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */,
+				C370BF452326550E00E321E6 /* OQ+NSView.swift in Sources */,
 				178D974D216C6DEB004F0B22 /* myWorkspace.swift in Sources */,
 				17DF4DF8225C8D83008591E8 /* MyWorkingListUtil.swift in Sources */,
 			);
@@ -627,6 +678,7 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -681,6 +733,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -696,15 +749,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z97K7ZHNKX;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = MyWorkingListForMac/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Daily work note";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -718,15 +776,20 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z97K7ZHNKX;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				INFOPLIST_FILE = MyWorkingListForMac/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Daily work note";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SKIP_INSTALL = NO;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

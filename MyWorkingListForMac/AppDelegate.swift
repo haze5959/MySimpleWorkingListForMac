@@ -199,7 +199,7 @@ extension AppDelegate {
                 }
                 
                 if records?.count == 0 {    //최초 실행
-                    self.makeWorkSpace(workSpaceName: "default");
+                    self.makeWorkSpace(workSpaceName: "default",dateType: .day)
                     
                 } else {
                     let sharedData = SharedData.instance;
@@ -236,16 +236,18 @@ extension AppDelegate {
     // MARK: ==============================
     // MARK: CloudKit 메서드
     // 워크스페이스 생성
-    func makeWorkSpace(workSpaceName:String) -> Void {
+    func makeWorkSpace(workSpaceName:String, dateType:DateType) -> Void {
         //******클라우드에 새 워크스페이즈 저장******
         NotificationCenter.default.post(name: .showProgress, object: nil)
         let record = CKRecord(recordType: "workSpace")
         record.setValue(workSpaceName, forKey: "name")
+        record.setValue(dateType.rawValue, forKey: "dateType")
+        
         self.privateDB.save(record) { savedRecord, error in
             guard error == nil else {
                 print("err: \(String(describing: error))");
                 self.openOneBtnDialogOK(question: (error?.localizedDescription)!, text: "Reload network connection.", {
-                    self.makeWorkSpace(workSpaceName: workSpaceName)
+                    self.makeWorkSpace(workSpaceName: workSpaceName, dateType: dateType)
                 })
                 return;
             }
@@ -486,7 +488,7 @@ extension AppDelegate {
         print("[AppDelegate] remote notification call!!")
         
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
-        if (notification.subscriptionID == "cloudkit-recordType-changes") {
+        if (notification?.subscriptionID == "cloudkit-recordType-changes") {
             print("[CLOUD UPDATE] notification - \(notification)")
             SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!) //일정 업데이트
         }

@@ -1,0 +1,19 @@
+{
+  "Mac" : [
+    {
+      "name" : "LaunchAtLogin",
+      "hash" : "2216fe04d2cb9ac49ff9446fd25fe851ff352f6d9ecfddba184e275e6db4ac3b",
+      "swiftToolchainVersion" : "5.0.1 (swiftlang-1001.0.82.4 clang-1001.0.46.5)"
+    }
+  ],
+  "watchOS" : [
+
+  ],
+  "tvOS" : [
+
+  ],
+  "commitish" : "v2.5.0",
+  "iOS" : [
+
+  ]
+}

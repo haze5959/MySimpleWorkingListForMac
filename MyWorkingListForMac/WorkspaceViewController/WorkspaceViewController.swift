@@ -42,24 +42,44 @@ class WorkspaceViewController: NSViewController {
     }
     
     @IBAction func addWorkspaceBtn(_ sender: Any) {
-        let msg = NSAlert()
-        msg.addButton(withTitle: "OK")      // 1st button
-        msg.addButton(withTitle: "Cancel")  // 2nd button
-        msg.messageText = "New WorkSpace"
+        let msgWithDateType = NSAlert()
+        msgWithDateType.addButton(withTitle: "Daily")      // 1st button
+        msgWithDateType.addButton(withTitle: "Weekly")  // 2nd button
+        msgWithDateType.addButton(withTitle: "Monthly")  // 3th button
+        msgWithDateType.addButton(withTitle: "Cancel")  // 4th button
+        msgWithDateType.messageText = "Please select a date type."
+        
+        var dateType = DateType.day
+        
+        let responseWithDateType = msgWithDateType.runModal()
+        if responseWithDateType == NSApplication.ModalResponse.alertFirstButtonReturn { //Daily
+            dateType = .day
+        } else if responseWithDateType == NSApplication.ModalResponse.alertSecondButtonReturn { //Weekly
+            dateType = .week
+        } else if responseWithDateType == NSApplication.ModalResponse.alertThirdButtonReturn { //Monthly
+            dateType = .month
+        } else {
+            return
+        }
+        
+        let msgWithInputName = NSAlert()
+        msgWithInputName.addButton(withTitle: "OK")      // 1st button
+        msgWithInputName.addButton(withTitle: "Cancel")  // 2nd button
+        msgWithInputName.messageText = "New WorkSpace"
         
         let txt = NSTextField(frame: NSRect(x: 0, y: 0, width: 300, height: 24))
         txt.placeholderString = "input your new workspace name..."
         txt.stringValue = ""
         
-        msg.accessoryView = txt
-        let response = msg.runModal()
+        msgWithInputName.accessoryView = txt
+        let response = msgWithInputName.runModal()
         
         if response == NSApplication.ModalResponse.alertFirstButtonReturn {
             if txt.stringValue != ""  {
                 //******클라우드에 새 워크스페이즈 저장******
                 let appDelegate = NSApplication.shared.delegate as! AppDelegate
                 appDelegate.popover.contentViewController = SharedData.instance.popOverVC
-                appDelegate.makeWorkSpace(workSpaceName: txt.stringValue);
+                appDelegate.makeWorkSpace(workSpaceName: txt.stringValue, dateType: dateType)
                 //***********************************
             } else {
                 let alert = NSAlert()
@@ -248,10 +268,20 @@ extension WorkspaceViewController: NSTableViewDataSource, NSTableViewDelegate {
 
         if let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: CellIdentifiers.TaskCell), owner: self) as? NSTableCellView {
             
+            var dateType = ""
+            switch SharedData.instance.workSpaceArr[row].dateType! {
+            case .day:
+                dateType = "Daily"
+            case .week:
+                dateType = "Weekly"
+            case .month:
+                dateType = "Monthly"
+            }
+            
             if(SharedData.instance.workSpaceArr[row].name == SharedData.instance.seletedWorkSpace?.name){
-                cell.textField?.stringValue = workSpace.name + " - Seleted!";
+                cell.textField?.stringValue = workSpace.name + " [\(dateType)]" + " - Seleted!";
             } else {
-                cell.textField?.stringValue = workSpace.name
+                cell.textField?.stringValue = workSpace.name + " [\(dateType)]"
             }
 
             return cell
