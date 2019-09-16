@@ -41,6 +41,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     @IBOutlet weak var refreshTimeLabel: NSTextField!
     @IBOutlet weak var datePicker: NSDatePicker!
     @IBOutlet weak var dateUpdateBtn: NSButton!
+    @IBOutlet weak var pinBtn: NSButton!
     
     @IBOutlet weak var indicatorView: IndicatorView!
     /**
@@ -70,7 +71,8 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
     
     let disposeBag = DisposeBag()
     
-    let EDIT_VIEW_HEIGHT = 150
+    let EDIT_VIEW_HEIGHT = 200
+    let TASK_VIEW_HEIGHT = 140
     let TIMER_CHECK_REFRESH_INTERVAL: RxTimeInterval = 100 //100초마다 체크
     
     var isDarkMode = false
@@ -143,6 +145,8 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
             UserDefaults.standard.set(popOverScreenSize.medium.rawValue, forKey: SettingViewController.POPOVER_SCREEN_SIZE)
         }
         
+        self.tableView.doubleAction = #selector(doubleClickTableRow)
+        
         //noti for NSPopoverWillShowNotification
         NotificationCenter.default.addObserver(self, selector: #selector(popoverWillShow), name: NSPopover.willShowNotification, object: nil)
         
@@ -155,6 +159,21 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         self.datePicker.action = #selector(datePickerChangeHandler)
         let action = NSEvent.EventTypeMask.mouseExited
         self.datePicker.sendAction(on: action)
+        
+        //Pin 버튼 이벤트 등록
+        self.pinBtn.rx.tap.subscribe(onNext: { () in
+            guard let eventMonitor = (NSApplication.shared.delegate as! AppDelegate).eventMonitor else {
+                return
+            }
+            
+            if eventMonitor.monitor == nil {
+                self.pinBtn.image = #imageLiteral(resourceName: "pin_white")
+                eventMonitor.start()
+            } else {
+                self.pinBtn.image = #imageLiteral(resourceName: "pin_black")
+                eventMonitor.stop()
+            }
+        }).disposed(by: self.disposeBag)
         
         //데이터 초기화 옵져버
         Observable<myWorkspace>.create{ observer in
@@ -251,7 +270,7 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
             
             NSAnimationContext.runAnimationGroup({ (context) in
                 context.duration = 0.2
-                self.taskScrollViewHeight.animator().constant = CGFloat(self.EDIT_VIEW_HEIGHT)
+                self.taskScrollViewHeight.animator().constant = CGFloat(TASK_VIEW_HEIGHT)
                 self.editViewHeight.animator().constant = size
             }) {
                 if self.isDarkMode {
@@ -380,7 +399,7 @@ extension PopOverViewController {
         let calendar = Calendar.current
         let weeks = calendar.range(of: .weekOfMonth, in: .month, for: pivotDate)!
         
-        //해당 달의 시작일을 구하는 로직
+        //해당 주의 시작일을 구하는 로직
         let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: calendar.startOfDay(for: pivotDate)))!
         let weekPivot = Calendar.current.date(from: Calendar.current.dateComponents([.yearForWeekOfYear, .weekOfYear], from: startOfMonth))!   //일요일로 변경
         
@@ -448,14 +467,14 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
         switch SharedData.instance.seletedWorkSpace!.dateType! {
         case .day:
             if (task.body != nil) && (task.body != "") {    // 본문이 있을 경우
-                return 145
+                return CGFloat(TASK_VIEW_HEIGHT)
             } else {
                 return 22
             }
         case .week:
-            return 145
+            return CGFloat(TASK_VIEW_HEIGHT)
         case .month:
-            return 145
+            return CGFloat(TASK_VIEW_HEIGHT)
         }
     }
     
@@ -494,6 +513,11 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
         }
         
         return true
+    }
+    
+    @objc func doubleClickTableRow() {
+        print("double Click row!")
+        self.pressExtendBtn(nil)
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {

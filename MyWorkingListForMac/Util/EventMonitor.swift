@@ -9,7 +9,7 @@
 import Cocoa
 
 class EventMonitor: NSObject {
-    private var monitor: Any?
+    var monitor: Any?
     private let mask: NSEvent.EventTypeMask
     private let handler: (NSEvent?) -> Void
     

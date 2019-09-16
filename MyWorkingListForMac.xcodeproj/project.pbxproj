@@ -22,8 +22,6 @@
 		178D974E216C6DEB004F0B22 /* myTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D974C216C6DEB004F0B22 /* myTask.swift */; };
 		178D9750216C74C6004F0B22 /* NotificationCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D974F216C74C6004F0B22 /* NotificationCustom.swift */; };
 		178D9752216C9ED5004F0B22 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 178D9751216C9ED5004F0B22 /* CloudKit.framework */; };
-		178D975921735B09004F0B22 /* baseline_calendar@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 178D975721735B09004F0B22 /* baseline_calendar@2x.png */; };
-		178D975A21735B09004F0B22 /* baseline_calendar@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 178D975821735B09004F0B22 /* baseline_calendar@3x.png */; };
 		178D9785217C41FA004F0B22 /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D9784217C41FA004F0B22 /* IndicatorView.swift */; };
 		17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C92D622206DB03004BC322 /* WorkspaceViewController.swift */; };
 		17C92D652206DB03004BC322 /* WorkspaceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17C92D632206DB03004BC322 /* WorkspaceViewController.xib */; };
@@ -64,8 +62,6 @@
 		178D974C216C6DEB004F0B22 /* myTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myTask.swift; sourceTree = "<group>"; };
 		178D974F216C74C6004F0B22 /* NotificationCustom.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationCustom.swift; sourceTree = "<group>"; };
 		178D9751216C9ED5004F0B22 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		178D975721735B09004F0B22 /* baseline_calendar@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "baseline_calendar@2x.png"; sourceTree = "<group>"; };
-		178D975821735B09004F0B22 /* baseline_calendar@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "baseline_calendar@3x.png"; sourceTree = "<group>"; };
 		178D975B217B3145004F0B22 /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/MainMenu.strings"; sourceTree = "<group>"; };
 		178D975C217B314B004F0B22 /* en-AU */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-AU"; path = "en-AU.lproj/MainMenu.strings"; sourceTree = "<group>"; };
 		178D975D217B314F004F0B22 /* en-IN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-IN"; path = "en-IN.lproj/MainMenu.strings"; sourceTree = "<group>"; };
@@ -197,7 +193,6 @@
 			children = (
 				C370BF43232654EB00E321E6 /* Extensions */,
 				17C92D612206DAE8004BC322 /* WorkspaceViewController */,
-				178D975521735B09004F0B22 /* Resource */,
 				178D974A216C6DEB004F0B22 /* Model */,
 				17686FB7215F64AD007C5146 /* SettingViewController */,
 				17686FB2215F508B007C5146 /* Util */,
@@ -227,23 +222,6 @@
 				178D974C216C6DEB004F0B22 /* myTask.swift */,
 			);
 			path = Model;
-			sourceTree = "<group>";
-		};
-		178D975521735B09004F0B22 /* Resource */ = {
-			isa = PBXGroup;
-			children = (
-				178D975621735B09004F0B22 /* images */,
-			);
-			path = Resource;
-			sourceTree = "<group>";
-		};
-		178D975621735B09004F0B22 /* images */ = {
-			isa = PBXGroup;
-			children = (
-				178D975721735B09004F0B22 /* baseline_calendar@2x.png */,
-				178D975821735B09004F0B22 /* baseline_calendar@3x.png */,
-			);
-			path = images;
 			sourceTree = "<group>";
 		};
 		17C92D612206DAE8004BC322 /* WorkspaceViewController */ = {
@@ -422,10 +400,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				178D975A21735B09004F0B22 /* baseline_calendar@3x.png in Resources */,
 				17686FAE215B76B7007C5146 /* PopOverViewController.xib in Resources */,
 				17C92D652206DB03004BC322 /* WorkspaceViewController.xib in Resources */,
-				178D975921735B09004F0B22 /* baseline_calendar@2x.png in Resources */,
 				17686FBB215F64CE007C5146 /* SettingViewController.xib in Resources */,
 				178D820E2144E8D100B1E796 /* Assets.xcassets in Resources */,
 				178D82112144E8D100B1E796 /* MainMenu.xib in Resources */,

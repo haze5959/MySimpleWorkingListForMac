@@ -184,6 +184,7 @@ class SettingViewController: NSViewController {
         //present work list View
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         appDelegate.popover.contentViewController = SharedData.instance.popOverVC
+        SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
         appDelegate.eventMonitor?.start()
     }
 }

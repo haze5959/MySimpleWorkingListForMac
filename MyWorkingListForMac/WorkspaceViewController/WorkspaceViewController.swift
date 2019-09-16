@@ -37,6 +37,7 @@ class WorkspaceViewController: NSViewController {
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         let sharedData = SharedData.instance
         appDelegate.popover.contentViewController = sharedData.popOverVC
+        SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
         appDelegate.eventMonitor?.start()
         sharedData.workSpaceUpdateObserver?.onNext(sharedData.seletedWorkSpace!)
     }

@@ -118,14 +118,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func showPopover(sender: Any?) {
         if let button = statusItem.button {
-            self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
             self.eventMonitor?.start()
+            self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
+            SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
         }
     }
     
     func closePopover(sender: Any?) {
-        self.popover.performClose(sender)
         self.eventMonitor?.stop()
+        self.popover.performClose(sender)
     }
     
     @objc func hotkeyOpenCalled() {
