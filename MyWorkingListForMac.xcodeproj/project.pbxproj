@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		17686F79215B4CE5007C5146 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 178D821E2144E8D100B1E796 /* Info.plist */; };
 		17686FAE215B76B7007C5146 /* PopOverViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17686FAC215B76B7007C5146 /* PopOverViewController.xib */; };
 		17686FAF215B76B7007C5146 /* PopOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17686FAD215B76B7007C5146 /* PopOverViewController.swift */; };
 		17686FB4215F508B007C5146 /* EventMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17686FB3215F508B007C5146 /* EventMonitor.swift */; };
@@ -16,7 +15,6 @@
 		178D820C2144E8CF00B1E796 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D820B2144E8CF00B1E796 /* AppDelegate.swift */; };
 		178D820E2144E8D100B1E796 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 178D820D2144E8D100B1E796 /* Assets.xcassets */; };
 		178D82112144E8D100B1E796 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 178D820F2144E8D100B1E796 /* MainMenu.xib */; };
-		178D821D2144E8D100B1E796 /* MyWorkingListForMacTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D821C2144E8D100B1E796 /* MyWorkingListForMacTests.swift */; };
 		178D9749216C6DA5004F0B22 /* SharedData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D9748216C6DA5004F0B22 /* SharedData.swift */; };
 		178D974D216C6DEB004F0B22 /* myWorkspace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D974B216C6DEB004F0B22 /* myWorkspace.swift */; };
 		178D974E216C6DEB004F0B22 /* myTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178D974C216C6DEB004F0B22 /* myTask.swift */; };
@@ -29,18 +27,28 @@
 		27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B9937A4AD95BE8E818C10E /* Pods_MyWorkingListForMac.framework */; };
 		3CE74FC6232203A40053F493 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3CE74FC5232203A40053F493 /* StoreKit.framework */; };
 		C370BF452326550E00E321E6 /* OQ+NSView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C370BF442326550E00E321E6 /* OQ+NSView.swift */; };
-		D469781BEB7B151C2A513B36 /* Pods_MyWorkingListForMacTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */; };
+		C3A1E05E233066BF0004467E /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A1E05C233066BF0004467E /* IAPHelper.swift */; };
+		C3A1E05F233066BF0004467E /* PremiumProducts.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A1E05D233066BF0004467E /* PremiumProducts.swift */; };
+		C3A1E06C2330AA940004467E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A1E06B2330AA940004467E /* AppDelegate.swift */; };
+		C3A1E0702330AA950004467E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C3A1E06F2330AA950004467E /* Assets.xcassets */; };
+		C3A1E0732330AA950004467E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3A1E0712330AA950004467E /* Main.storyboard */; };
+		C3A1E07A2330AB5B0004467E /* LauncherApplication.app in CopyFiles */ = {isa = PBXBuildFile; fileRef = C3A1E0692330AA940004467E /* LauncherApplication.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C3A1E07C2330AB910004467E /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3A1E07B2330AB910004467E /* ServiceManagement.framework */; };
+		C3A1E07E2330ACBB0004467E /* OQ+Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A1E07D2330ACBB0004467E /* OQ+Notification.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		178D82192144E8D100B1E796 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 178D82002144E8CF00B1E796 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 178D82072144E8CF00B1E796;
-			remoteInfo = MyWorkingListForMac;
+/* Begin PBXCopyFilesBuildPhase section */
+		C3A1E0792330AB380004467E /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Library/LoginItems;
+			dstSubfolderSpec = 1;
+			files = (
+				C3A1E07A2330AB5B0004467E /* LauncherApplication.app in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXContainerItemProxy section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		17686FAC215B76B7007C5146 /* PopOverViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopOverViewController.xib; sourceTree = "<group>"; };
@@ -48,15 +56,12 @@
 		17686FB3215F508B007C5146 /* EventMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventMonitor.swift; sourceTree = "<group>"; };
 		17686FB8215F64AD007C5146 /* SettingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		17686FBA215F64CE007C5146 /* SettingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingViewController.xib; sourceTree = "<group>"; };
-		178D82082144E8CF00B1E796 /* Daily work note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Daily work note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		178D82082144E8CF00B1E796 /* Daily Work Note.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Daily Work Note.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		178D820B2144E8CF00B1E796 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		178D820D2144E8D100B1E796 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		178D82102144E8D100B1E796 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		178D82122144E8D100B1E796 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		178D82132144E8D100B1E796 /* MyWorkingListForMac.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MyWorkingListForMac.entitlements; sourceTree = "<group>"; };
-		178D82182144E8D100B1E796 /* MyWorkingListForMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyWorkingListForMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		178D821C2144E8D100B1E796 /* MyWorkingListForMacTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyWorkingListForMacTests.swift; sourceTree = "<group>"; };
-		178D821E2144E8D100B1E796 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		178D9748216C6DA5004F0B22 /* SharedData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharedData.swift; sourceTree = "<group>"; };
 		178D974B216C6DEB004F0B22 /* myWorkspace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myWorkspace.swift; sourceTree = "<group>"; };
 		178D974C216C6DEB004F0B22 /* myTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = myTask.swift; sourceTree = "<group>"; };
@@ -112,6 +117,16 @@
 		B4205BB8DE04813821EC6BB5 /* Pods-MyWorkingListForMacTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMacTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMacTests/Pods-MyWorkingListForMacTests.release.xcconfig"; sourceTree = "<group>"; };
 		C32674512327610400E8FDB1 /* LaunchAtLogin.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LaunchAtLogin.framework; path = Carthage/Build/Mac/LaunchAtLogin.framework; sourceTree = "<group>"; };
 		C370BF442326550E00E321E6 /* OQ+NSView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OQ+NSView.swift"; sourceTree = "<group>"; };
+		C3A1E05C233066BF0004467E /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
+		C3A1E05D233066BF0004467E /* PremiumProducts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PremiumProducts.swift; sourceTree = "<group>"; };
+		C3A1E0692330AA940004467E /* LauncherApplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LauncherApplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3A1E06B2330AA940004467E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		C3A1E06F2330AA950004467E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		C3A1E0722330AA950004467E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		C3A1E0742330AA950004467E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C3A1E0752330AA950004467E /* LauncherApplication.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LauncherApplication.entitlements; sourceTree = "<group>"; };
+		C3A1E07B2330AB910004467E /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
+		C3A1E07D2330ACBB0004467E /* OQ+Notification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "OQ+Notification.swift"; sourceTree = "<group>"; };
 		EF0FC01CC1159FB7B093E1E4 /* Pods_MyWorkingListForMacTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyWorkingListForMacTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F70E51C982862CD998C642B8 /* Pods-MyWorkingListForMacTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyWorkingListForMacTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyWorkingListForMacTests/Pods-MyWorkingListForMacTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,17 +136,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3A1E07C2330AB910004467E /* ServiceManagement.framework in Frameworks */,
 				3CE74FC6232203A40053F493 /* StoreKit.framework in Frameworks */,
 				27FC534B902AD27C71199DAE /* Pods_MyWorkingListForMac.framework in Frameworks */,
 				178D9752216C9ED5004F0B22 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		178D82152144E8D100B1E796 /* Frameworks */ = {
+		C3A1E0662330AA940004467E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D469781BEB7B151C2A513B36 /* Pods_MyWorkingListForMacTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +187,7 @@
 			isa = PBXGroup;
 			children = (
 				178D820A2144E8CF00B1E796 /* MyWorkingListForMac */,
-				178D821B2144E8D100B1E796 /* MyWorkingListForMacTests */,
+				C3A1E06A2330AA940004467E /* LauncherApplication */,
 				178D82092144E8CF00B1E796 /* Products */,
 				416441F08D6E73AD38105887 /* Pods */,
 				AE17C38939598A30C6DED22D /* Frameworks */,
@@ -182,8 +197,8 @@
 		178D82092144E8CF00B1E796 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				178D82082144E8CF00B1E796 /* Daily work note.app */,
-				178D82182144E8D100B1E796 /* MyWorkingListForMacTests.xctest */,
+				178D82082144E8CF00B1E796 /* Daily Work Note.app */,
+				C3A1E0692330AA940004467E /* LauncherApplication.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -191,6 +206,7 @@
 		178D820A2144E8CF00B1E796 /* MyWorkingListForMac */ = {
 			isa = PBXGroup;
 			children = (
+				C3A1E05B233066BF0004467E /* IAPHelper */,
 				C370BF43232654EB00E321E6 /* Extensions */,
 				17C92D612206DAE8004BC322 /* WorkspaceViewController */,
 				178D974A216C6DEB004F0B22 /* Model */,
@@ -204,15 +220,6 @@
 				178D82132144E8D100B1E796 /* MyWorkingListForMac.entitlements */,
 			);
 			path = MyWorkingListForMac;
-			sourceTree = "<group>";
-		};
-		178D821B2144E8D100B1E796 /* MyWorkingListForMacTests */ = {
-			isa = PBXGroup;
-			children = (
-				178D821C2144E8D100B1E796 /* MyWorkingListForMacTests.swift */,
-				178D821E2144E8D100B1E796 /* Info.plist */,
-			);
-			path = MyWorkingListForMacTests;
 			sourceTree = "<group>";
 		};
 		178D974A216C6DEB004F0B22 /* Model */ = {
@@ -247,6 +254,7 @@
 		AE17C38939598A30C6DED22D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C3A1E07B2330AB910004467E /* ServiceManagement.framework */,
 				C32674512327610400E8FDB1 /* LaunchAtLogin.framework */,
 				3CE74FC5232203A40053F493 /* StoreKit.framework */,
 				178D9751216C9ED5004F0B22 /* CloudKit.framework */,
@@ -259,9 +267,31 @@
 		C370BF43232654EB00E321E6 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				C3A1E07D2330ACBB0004467E /* OQ+Notification.swift */,
 				C370BF442326550E00E321E6 /* OQ+NSView.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		C3A1E05B233066BF0004467E /* IAPHelper */ = {
+			isa = PBXGroup;
+			children = (
+				C3A1E05C233066BF0004467E /* IAPHelper.swift */,
+				C3A1E05D233066BF0004467E /* PremiumProducts.swift */,
+			);
+			path = IAPHelper;
+			sourceTree = "<group>";
+		};
+		C3A1E06A2330AA940004467E /* LauncherApplication */ = {
+			isa = PBXGroup;
+			children = (
+				C3A1E06B2330AA940004467E /* AppDelegate.swift */,
+				C3A1E06F2330AA950004467E /* Assets.xcassets */,
+				C3A1E0712330AA950004467E /* Main.storyboard */,
+				C3A1E0742330AA950004467E /* Info.plist */,
+				C3A1E0752330AA950004467E /* LauncherApplication.entitlements */,
+			);
+			path = LauncherApplication;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,8 +306,7 @@
 				178D82052144E8CF00B1E796 /* Frameworks */,
 				178D82062144E8CF00B1E796 /* Resources */,
 				31CBE9C30D38189739FE1647 /* [CP] Embed Pods Frameworks */,
-				C32674532327615200E8FDB1 /* ShellScript */,
-				C3267458232764D000E8FDB1 /* ShellScript */,
+				C3A1E0792330AB380004467E /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -285,27 +314,25 @@
 			);
 			name = MyWorkingListForMac;
 			productName = MyWorkingListForMac;
-			productReference = 178D82082144E8CF00B1E796 /* Daily work note.app */;
+			productReference = 178D82082144E8CF00B1E796 /* Daily Work Note.app */;
 			productType = "com.apple.product-type.application";
 		};
-		178D82172144E8D100B1E796 /* MyWorkingListForMacTests */ = {
+		C3A1E0682330AA940004467E /* LauncherApplication */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 178D822F2144E8D100B1E796 /* Build configuration list for PBXNativeTarget "MyWorkingListForMacTests" */;
+			buildConfigurationList = C3A1E0762330AA950004467E /* Build configuration list for PBXNativeTarget "LauncherApplication" */;
 			buildPhases = (
-				D8B414E378F8D41344B34966 /* [CP] Check Pods Manifest.lock */,
-				178D82142144E8D100B1E796 /* Sources */,
-				178D82152144E8D100B1E796 /* Frameworks */,
-				178D82162144E8D100B1E796 /* Resources */,
+				C3A1E0652330AA940004467E /* Sources */,
+				C3A1E0662330AA940004467E /* Frameworks */,
+				C3A1E0672330AA940004467E /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				178D821A2144E8D100B1E796 /* PBXTargetDependency */,
 			);
-			name = MyWorkingListForMacTests;
-			productName = MyWorkingListForMacTests;
-			productReference = 178D82182144E8D100B1E796 /* MyWorkingListForMacTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
+			name = LauncherApplication;
+			productName = LauncherApplication;
+			productReference = C3A1E0692330AA940004467E /* LauncherApplication.app */;
+			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
@@ -313,7 +340,7 @@
 		178D82002144E8CF00B1E796 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0940;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = OQ;
 				TargetAttributes = {
@@ -331,9 +358,8 @@
 							};
 						};
 					};
-					178D82172144E8D100B1E796 = {
-						CreatedOnToolsVersion = 9.4.1;
-						TestTargetID = 178D82072144E8CF00B1E796;
+					C3A1E0682330AA940004467E = {
+						CreatedOnToolsVersion = 10.2.1;
 					};
 				};
 			};
@@ -390,7 +416,7 @@
 			projectRoot = "";
 			targets = (
 				178D82072144E8CF00B1E796 /* MyWorkingListForMac */,
-				178D82172144E8D100B1E796 /* MyWorkingListForMacTests */,
+				C3A1E0682330AA940004467E /* LauncherApplication */,
 			);
 		};
 /* End PBXProject section */
@@ -405,14 +431,15 @@
 				17686FBB215F64CE007C5146 /* SettingViewController.xib in Resources */,
 				178D820E2144E8D100B1E796 /* Assets.xcassets in Resources */,
 				178D82112144E8D100B1E796 /* MainMenu.xib in Resources */,
-				17686F79215B4CE5007C5146 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		178D82162144E8D100B1E796 /* Resources */ = {
+		C3A1E0672330AA940004467E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3A1E0702330AA950004467E /* Assets.xcassets in Resources */,
+				C3A1E0732330AA950004467E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -454,59 +481,6 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyWorkingListForMac/Pods-MyWorkingListForMac-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C32674532327615200E8FDB1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/LaunchAtLogin.framework",
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
-		};
-		C3267458232764D000E8FDB1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "${PROJECT_DIR}/Carthage/Build/Mac/LaunchAtLogin.framework/Resources/copy-helper.sh\n";
-		};
-		D8B414E378F8D41344B34966 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MyWorkingListForMacTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -515,6 +489,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				17686FB4215F508B007C5146 /* EventMonitor.swift in Sources */,
+				C3A1E05F233066BF0004467E /* PremiumProducts.swift in Sources */,
+				C3A1E05E233066BF0004467E /* IAPHelper.swift in Sources */,
 				17686FAF215B76B7007C5146 /* PopOverViewController.swift in Sources */,
 				178D820C2144E8CF00B1E796 /* AppDelegate.swift in Sources */,
 				178D9749216C6DA5004F0B22 /* SharedData.swift in Sources */,
@@ -523,29 +499,22 @@
 				17686FB9215F64AD007C5146 /* SettingViewController.swift in Sources */,
 				178D974E216C6DEB004F0B22 /* myTask.swift in Sources */,
 				17C92D642206DB03004BC322 /* WorkspaceViewController.swift in Sources */,
+				C3A1E07E2330ACBB0004467E /* OQ+Notification.swift in Sources */,
 				C370BF452326550E00E321E6 /* OQ+NSView.swift in Sources */,
 				178D974D216C6DEB004F0B22 /* myWorkspace.swift in Sources */,
 				17DF4DF8225C8D83008591E8 /* MyWorkingListUtil.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		178D82142144E8D100B1E796 /* Sources */ = {
+		C3A1E0652330AA940004467E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				178D821D2144E8D100B1E796 /* MyWorkingListForMacTests.swift in Sources */,
+				C3A1E06C2330AA940004467E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		178D821A2144E8D100B1E796 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 178D82072144E8CF00B1E796 /* MyWorkingListForMac */;
-			targetProxy = 178D82192144E8D100B1E796 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		178D820F2144E8D100B1E796 /* MainMenu.xib */ = {
@@ -593,6 +562,14 @@
 				178D9781217B31FF004F0B22 /* ms */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		C3A1E0712330AA950004467E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C3A1E0722330AA950004467E /* Base */,
+			);
+			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -721,22 +698,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyWorkingListForMac/MyWorkingListForMac.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Mac Developer: OGyu kwon (GM9445BKN6)";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z97K7ZHNKX;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = MyWorkingListForMac/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac;
-				PRODUCT_NAME = "Daily work note";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PRODUCT_NAME = "Daily Work Note";
+				PROVISIONING_PROFILE_SPECIFIER = "MyWorkingListForMac Dev 2019";
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
 			};
@@ -748,68 +723,68 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = MyWorkingListForMac/MyWorkingListForMac.entitlements;
-				CODE_SIGN_IDENTITY = "Mac Developer";
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Z97K7ZHNKX;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/Mac",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = MyWorkingListForMac/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac;
-				PRODUCT_NAME = "Daily work note";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PRODUCT_NAME = "Daily Work Note";
+				PROVISIONING_PROFILE_SPECIFIER = "MyWorkingListForMac Dist 2019";
 				SKIP_INSTALL = NO;
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
-		178D82302144E8D100B1E796 /* Debug */ = {
+		C3A1E0772330AA950004467E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F70E51C982862CD998C642B8 /* Pods-MyWorkingListForMacTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LauncherApplication/LauncherApplication.entitlements;
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 5T9LN79RPK;
-				INFOPLIST_FILE = MyWorkingListForMacTests/Info.plist;
+				DEVELOPMENT_TEAM = Z97K7ZHNKX;
+				INFOPLIST_FILE = LauncherApplication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = oq.MyWorkingListForMacTests;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac.LauncherApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyWorkingListForMac.app/Contents/MacOS/MyWorkingListForMac";
+				PROVISIONING_PROFILE_SPECIFIER = "MyWorkingListForMacLauncher Dev 2019";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
-		178D82312144E8D100B1E796 /* Release */ = {
+		C3A1E0782330AA950004467E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4205BB8DE04813821EC6BB5 /* Pods-MyWorkingListForMacTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = LauncherApplication/LauncherApplication.entitlements;
+				CODE_SIGN_IDENTITY = "3rd Party Mac Developer Application";
+				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 5T9LN79RPK;
-				INFOPLIST_FILE = MyWorkingListForMacTests/Info.plist;
+				DEVELOPMENT_TEAM = Z97K7ZHNKX;
+				INFOPLIST_FILE = LauncherApplication/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = oq.MyWorkingListForMacTests;
+				MACOSX_DEPLOYMENT_TARGET = 10.14;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.oq.MyWorkingListForMac.LauncherApplication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyWorkingListForMac.app/Contents/MacOS/MyWorkingListForMac";
+				PROVISIONING_PROFILE_SPECIFIER = "MyWorkingListForMacLauncher Dist 2019";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -834,11 +809,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		178D822F2144E8D100B1E796 /* Build configuration list for PBXNativeTarget "MyWorkingListForMacTests" */ = {
+		C3A1E0762330AA950004467E /* Build configuration list for PBXNativeTarget "LauncherApplication" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				178D82302144E8D100B1E796 /* Debug */,
-				178D82312144E8D100B1E796 /* Release */,
+				C3A1E0772330AA950004467E /* Debug */,
+				C3A1E0782330AA950004467E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

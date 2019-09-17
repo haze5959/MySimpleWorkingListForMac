@@ -9,8 +9,10 @@
 import Cocoa
 import Magnet
 import CloudKit
+import StoreKit
 import RxSwift
 import RxCocoa
+import ServiceManagement
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -25,6 +27,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     public let updateWaitingTask = BehaviorRelay<myTask?>(value: nil)
     let disposeBag = DisposeBag()
+    
+    var reviewTimer: Timer?
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         print("[AppDelegate] MyWorkingList App start!!")
@@ -74,6 +78,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.initCloud()
         self.initUpdateTaskObserver()
+        
+        self.showReviewTimer(second: 7200)
+        self.manageLauncherApp()
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -146,16 +153,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     // MARK: Open dialog
-    func openTwoBtnDialogOKCancel(question: String, text: String) -> Void
+    func openTwoBtnDialogOKCancel(message: String, informativeText: String, leftBtnTitle: String = "OK", rightBtnTitle: String = "Cancel", _ completion: @escaping (_ response: NSApplication.ModalResponse) -> Void) -> Void
     {
         DispatchQueue.main.async {
             let alert = NSAlert()
-            alert.messageText = question
-            alert.informativeText = text
-            alert.alertStyle = NSAlert.Style.warning
-            alert.addButton(withTitle: "OK")
-            alert.addButton(withTitle: "Cancel")
-            alert.runModal()
+            alert.messageText = message
+            alert.informativeText = informativeText
+            alert.alertStyle = NSAlert.Style.informational
+            alert.addButton(withTitle: leftBtnTitle)
+            alert.addButton(withTitle: rightBtnTitle)
+            let response = alert.runModal()
+            completion(response)
         }
     }
     
@@ -490,8 +498,92 @@ extension AppDelegate {
         
         let notification = CKNotification(fromRemoteNotificationDictionary: userInfo)
         if (notification?.subscriptionID == "cloudkit-recordType-changes") {
-            print("[CLOUD UPDATE] notification - \(notification)")
+            print("[CLOUD UPDATE] notification - \(String(describing: notification))")
             SharedData.instance.workSpaceUpdateObserver?.onNext(SharedData.instance.seletedWorkSpace!) //일정 업데이트
         }
+    }
+    
+    // MARK: - Review
+    func showReviewTimer(second:Int) {
+        DispatchQueue.main.async {
+            if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
+                if !UserDefaults().bool(forKey: "sawReview") {
+                    self.reviewTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(second), repeats: true, block: { timer in
+                        self.reviewTimer?.invalidate()
+                        self.reviewTimer = nil
+                        DispatchQueue.main.async {
+                            SKStoreReviewController.requestReview()   //리뷰 평점 작성 메서드
+                            UserDefaults().set(true, forKey: "sawReview")
+                        }
+                    })
+                }
+            } else {
+                self.reviewTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(second), repeats: true, block: { timer in
+                    self.showPhurcaseDialog()
+                })
+            }
+        }
+    }
+    
+    func showPhurcaseDialog() {
+        if IAPHelper.canMakePayments() {
+            NotificationCenter.default.post(name: .showProgress, object: nil)
+            
+            PremiumProducts.store.requestProducts { (success, products) in
+                NotificationCenter.default.post(name: .closeProgress, object: nil)
+                if success, let product = products?.first {
+                    let numberFormatter = NumberFormatter()
+                    let locale = product.priceLocale
+                    numberFormatter.numberStyle = .currency
+                    numberFormatter.locale = locale
+                    
+                    self.openTwoBtnDialogOKCancel(message: product.localizedTitle, informativeText: product.localizedDescription, leftBtnTitle: "Later...", rightBtnTitle: numberFormatter.string(from: product.price)!, { (response) in
+                        if response == NSApplication.ModalResponse.alertSecondButtonReturn {
+                            PremiumProducts.store.buyProduct(product)
+                            NotificationCenter.default.addObserver(self, selector: #selector(self.buyComplete),
+                                                                   name: .IAPHelperPurchaseNotification,
+                                                                   object: nil)
+                        }
+                    })
+                } else {
+                    print("showPhurcaseDialog 실패!!!")
+                }
+            }
+        } else {
+            self.openOneBtnDialogOK(question: "Info", text: "Payment unavailable.") {
+                print("Payment unavailable.")
+            }
+        }
+    }
+    
+    @objc func buyComplete() {
+        self.openOneBtnDialogOK(question: "Info", text: "Purchase completed!") {
+            print("Purchase completed!")
+        }
+    }
+    
+    func manageLauncherApp() {
+        if UserDefaults().bool(forKey: "LaunchAtLogin") {
+            let launcherAppId = "com.oq.MyWorkingListForMac.LauncherApplication"
+            let runningApps = NSWorkspace.shared.runningApplications
+            let isRunning = !runningApps.filter { $0.bundleIdentifier == launcherAppId }.isEmpty
+            
+            SMLoginItemSetEnabled(launcherAppId as CFString, true)
+            
+            if isRunning {
+                DistributedNotificationCenter.default().post(name: .killLauncher,
+                                                             object: Bundle.main.bundleIdentifier!)
+            }
+        }
+    }
+    
+    func enableLauncherApp(launcherAppId:String) {
+        UserDefaults().set(true, forKey: "LaunchAtLogin")
+        SMLoginItemSetEnabled(launcherAppId as CFString, true)
+    }
+    
+    func disableLauncherApp(launcherAppId:String) {
+        UserDefaults().set(false, forKey: "LaunchAtLogin")
+        SMLoginItemSetEnabled(launcherAppId as CFString, false)
     }
 }

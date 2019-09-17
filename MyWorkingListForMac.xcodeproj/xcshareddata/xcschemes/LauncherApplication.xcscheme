@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "178D82072144E8CF00B1E796"
-               BuildableName = "Daily Work Note.app"
-               BlueprintName = "MyWorkingListForMac"
+               BlueprintIdentifier = "C3A1E0682330AA940004467E"
+               BuildableName = "LauncherApplication.app"
+               BlueprintName = "LauncherApplication"
                ReferencedContainer = "container:MyWorkingListForMac.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,23 +28,13 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "178D82172144E8D100B1E796"
-               BuildableName = "MyWorkingListForMacTests.xctest"
-               BlueprintName = "MyWorkingListForMacTests"
-               ReferencedContainer = "container:MyWorkingListForMac.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "178D82072144E8CF00B1E796"
-            BuildableName = "Daily Work Note.app"
-            BlueprintName = "MyWorkingListForMac"
+            BlueprintIdentifier = "C3A1E0682330AA940004467E"
+            BuildableName = "LauncherApplication.app"
+            BlueprintName = "LauncherApplication"
             ReferencedContainer = "container:MyWorkingListForMac.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,9 +55,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "178D82072144E8CF00B1E796"
-            BuildableName = "Daily Work Note.app"
-            BlueprintName = "MyWorkingListForMac"
+            BlueprintIdentifier = "C3A1E0682330AA940004467E"
+            BuildableName = "LauncherApplication.app"
+            BlueprintName = "LauncherApplication"
             ReferencedContainer = "container:MyWorkingListForMac.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -84,9 +74,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "178D82072144E8CF00B1E796"
-            BuildableName = "Daily Work Note.app"
-            BlueprintName = "MyWorkingListForMac"
+            BlueprintIdentifier = "C3A1E0682330AA940004467E"
+            BuildableName = "LauncherApplication.app"
+            BlueprintName = "LauncherApplication"
             ReferencedContainer = "container:MyWorkingListForMac.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

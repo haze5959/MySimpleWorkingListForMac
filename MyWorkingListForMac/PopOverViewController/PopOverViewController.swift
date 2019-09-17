@@ -68,7 +68,6 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
 //    let autoUpdateTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimerHandler), userInfo: nil, repeats: true)
     var autoUpdateTimer: Disposable?
     
-    
     let disposeBag = DisposeBag()
     
     let EDIT_VIEW_HEIGHT = 200

@@ -11,7 +11,7 @@ import KeyHolder
 import Magnet
 import RxCocoa
 import RxSwift
-import LaunchAtLogin
+import StoreKit
 
 enum popOverScreenSize: Int {
     case small
@@ -50,24 +50,22 @@ class SettingViewController: NSViewController {
     @IBOutlet weak var largeRadioBtn: NSButton!
     @IBOutlet weak var autoUpdateTimeInterval: NSTextField!
     @IBOutlet weak var launchLoginAppCheckBox: NSButton!
+    @IBOutlet weak var purchaseAndReviewBtn: NSButton!
     
     private let disposedBag: DisposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("LaunchAtLogin: \(LaunchAtLogin.isEnabled)")
-        self.launchLoginAppCheckBox.state = UserDefaults().bool(forKey: "LaunchAtLogin") ? .on : .off
         
+        self.launchLoginAppCheckBox.state = UserDefaults().bool(forKey: "LaunchAtLogin") ? .on : .off
         self.launchLoginAppCheckBox.rx.tap.subscribe { (event) in
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            let launcherAppId = "com.oq.MyWorkingListForMac.LauncherApplication"
             if self.launchLoginAppCheckBox.state == .on {
-                LaunchAtLogin.isEnabled = true
-                UserDefaults().set(true, forKey: "LaunchAtLogin")
+                appDelegate.enableLauncherApp(launcherAppId: launcherAppId)
             } else {
-                LaunchAtLogin.isEnabled = false
-                UserDefaults().set(false, forKey: "LaunchAtLogin")
+                appDelegate.disableLauncherApp(launcherAppId: launcherAppId)
             }
-            
-            print("LaunchAtLogin: \(LaunchAtLogin.isEnabled)")
         }.disposed(by: self.disposeBag)
         
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
@@ -178,6 +176,12 @@ class SettingViewController: NSViewController {
                 UserDefaults().set(self.autoUpdateTimeInterval.integerValue, forKey: SettingViewController.AUTO_UPDATE_TIME);
                 SharedData.instance.popOverVC.CHANGE_UPDATE_TIME = RxTimeInterval(self.autoUpdateTimeInterval.integerValue)
             }).disposed(by: self.disposeBag)
+        
+        if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
+            self.purchaseAndReviewBtn.title = "Review the app"
+        } else {
+            self.purchaseAndReviewBtn.title = "Premium Version"
+        }
     }
 
     @IBAction func pressCloseBtn(_ sender: Any) {
@@ -186,6 +190,17 @@ class SettingViewController: NSViewController {
         appDelegate.popover.contentViewController = SharedData.instance.popOverVC
         SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
         appDelegate.eventMonitor?.start()
+    }
+    
+    @IBAction func pressReviewAppBtn(_ sender: Any) {
+        if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
+            DispatchQueue.main.async {
+                SKStoreReviewController.requestReview()   //리뷰 평점 작성 메서드
+            }
+        } else {
+            let appDelegate = NSApplication.shared.delegate as! AppDelegate
+            appDelegate.showPhurcaseDialog()
+        }
     }
 }
 
