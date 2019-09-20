@@ -505,6 +505,7 @@ extension AppDelegate {
     
     // MARK: - Review
     func showReviewTimer(second:Int) {
+        PremiumProducts.store.restorePurchases()
         DispatchQueue.main.async {
             if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
                 if !UserDefaults().bool(forKey: "sawReview") {
@@ -519,7 +520,9 @@ extension AppDelegate {
                 }
             } else {
                 self.reviewTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(second), repeats: true, block: { timer in
-                    self.showPhurcaseDialog()
+                    if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
+                        self.showPhurcaseDialog()
+                    }
                 })
             }
         }
