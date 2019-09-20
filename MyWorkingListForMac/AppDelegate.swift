@@ -79,6 +79,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.initCloud()
         self.initUpdateTaskObserver()
         
+        if !PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
+            PremiumProducts.store.restorePurchases()
+        }
+        
         self.showReviewTimer(second: 7200)
         self.manageLauncherApp()
     }
@@ -505,7 +509,6 @@ extension AppDelegate {
     
     // MARK: - Review
     func showReviewTimer(second:Int) {
-        PremiumProducts.store.restorePurchases()
         DispatchQueue.main.async {
             if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
                 if !UserDefaults().bool(forKey: "sawReview") {
@@ -513,7 +516,7 @@ extension AppDelegate {
                         self.reviewTimer?.invalidate()
                         self.reviewTimer = nil
                         DispatchQueue.main.async {
-                            SKStoreReviewController.requestReview()   //리뷰 평점 작성 메서드
+                            SKStoreReviewController.requestReview()   //리뷰 평점 작성 메서드4
                             UserDefaults().set(true, forKey: "sawReview")
                         }
                     })
