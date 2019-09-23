@@ -85,6 +85,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.showReviewTimer(second: 7200)
         self.manageLauncherApp()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(calendarDayDidChange), name:NSNotification.Name.NSCalendarDayChanged, object:nil)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -591,5 +593,13 @@ extension AppDelegate {
     func disableLauncherApp(launcherAppId:String) {
         UserDefaults().set(false, forKey: "LaunchAtLogin")
         SMLoginItemSetEnabled(launcherAppId as CFString, false)
+    }
+    
+    @objc func calendarDayDidChange(notification : NSNotification) {
+        guard let seletedWorkSpace = SharedData.instance.seletedWorkSpace else {
+            print("seletedWorkSpace is nil")
+            return
+        }
+        SharedData.instance.workSpaceUpdateObserver?.onNext(seletedWorkSpace)
     }
 }
