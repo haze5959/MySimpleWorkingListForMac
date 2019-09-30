@@ -191,7 +191,7 @@ extension AppDelegate {
         //iCloud 권한 체크
         CKContainer.init(identifier: "iCloud.com.oq.MyWorkingList").accountStatus{ status, error in
             guard status == .available else {
-                self.openOneBtnDialogOK(question: "user’s iCloud is not available\nThis might happen if the user is not logged into iCloud.", text: "Quit the app.", {
+                self.openOneBtnDialogOK(question: "user’s iCloud is not available\nThis might happen if the user is not logged into iCloud. Please check out this post: https://support.apple.com/en-us/HT208682#macos", text: "Quit the app.", {
                     NSApplication.shared.terminate(self)    //Quit App
                 })
                 return
@@ -207,7 +207,7 @@ extension AppDelegate {
             self.privateDB.perform(query, inZoneWith: nil) { records, error in
                 guard error == nil else {
                     print("err: \(String(describing: error))");
-                    self.openOneBtnDialogOK(question: "iCloud connection is unstable.\nThis might happen if the user is not logged into iCloud.", text: "Quit the app.", {
+                    self.openOneBtnDialogOK(question: "iCloud connection is unstable.\nThis might happen if the user is not logged into iCloud. Please check out this post: https://support.apple.com/en-us/HT208682#macos", text: "Quit the app.", {
                         NSApplication.shared.terminate(self)    //Quit App
                     })
                     return;
