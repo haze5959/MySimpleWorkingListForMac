@@ -86,7 +86,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.showReviewTimer(second: 7200)
         self.manageLauncherApp()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(calendarDayDidChange), name:NSNotification.Name.NSCalendarDayChanged, object:nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(self.buyComplete),
+                                               name: .IAPHelperPurchaseNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(calendarDayDidChange),
+                                               name:NSNotification.Name.NSCalendarDayChanged,
+                                               object:nil)
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -163,6 +171,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     {
         DispatchQueue.main.async {
             let alert = NSAlert()
+            alert.icon = #imageLiteral(resourceName: "Premium")
             alert.messageText = message
             alert.informativeText = informativeText
             alert.alertStyle = NSAlert.Style.informational
@@ -548,9 +557,6 @@ extension AppDelegate {
                     self.openTwoBtnDialogOKCancel(message: product.localizedTitle, informativeText: product.localizedDescription, leftBtnTitle: "Later...", rightBtnTitle: numberFormatter.string(from: product.price)!, { (response) in
                         if response == NSApplication.ModalResponse.alertSecondButtonReturn {
                             PremiumProducts.store.buyProduct(product)
-                            NotificationCenter.default.addObserver(self, selector: #selector(self.buyComplete),
-                                                                   name: .IAPHelperPurchaseNotification,
-                                                                   object: nil)
                         }
                     })
                 } else {

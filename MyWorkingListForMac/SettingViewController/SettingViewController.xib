@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="SettingViewController" customModule="Daily_work_note" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="SettingViewController" customModule="Daily_Work_Note" customModuleProvider="target">
             <connections>
                 <outlet property="autoUpdateTimeInterval" destination="Wg2-La-anv" id="81o-Bg-Ws8"/>
                 <outlet property="icloudOwnerLabel" destination="D6b-Dn-HcL" id="0qN-nz-jsV"/>
@@ -14,6 +15,7 @@
                 <outlet property="mediumRadioBtn" destination="ock-Ne-sIc" id="bSY-s2-cnM"/>
                 <outlet property="openPopoverRecordView" destination="oKq-kl-E7P" id="PzO-bT-btb"/>
                 <outlet property="purchaseAndReviewBtn" destination="YsO-ZQ-S5e" id="qce-4f-7aE"/>
+                <outlet property="purchaseRestoreBtn" destination="xkI-L8-bN9" id="YJt-75-dmh"/>
                 <outlet property="refreshRecordView" destination="Yyv-Zk-I5N" id="GBP-O3-Ygi"/>
                 <outlet property="smallRadioBtn" destination="2qF-Tf-ut3" id="r0R-O3-drO"/>
                 <outlet property="syncTimeLabel" destination="0gA-N9-iV1" id="o4n-vn-cdm"/>
@@ -23,14 +25,14 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view wantsLayer="YES" id="pfq-NA-abi">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="506"/>
+            <rect key="frame" x="0.0" y="0.0" width="480" height="504"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="afE-9D-FXX" userLabel="Info View">
-                    <rect key="frame" x="0.0" y="374" width="480" height="132"/>
+                    <rect key="frame" x="0.0" y="374" width="480" height="130"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GmF-6Q-jaU">
-                            <rect key="frame" x="195" y="103" width="90" height="19"/>
+                            <rect key="frame" x="195" y="101" width="90" height="19"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Preference" id="Z5l-Kx-zU2">
                                 <font key="font" metaFont="systemBold" size="16"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -38,7 +40,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0gA-N9-iV1">
-                            <rect key="frame" x="109" y="47" width="66" height="17"/>
+                            <rect key="frame" x="109" y="46" width="66" height="16"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Loading..." id="W9z-zk-EaX">
                                 <font key="font" metaFont="systemMedium" size="13"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -46,7 +48,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wGJ-Lu-guu">
-                            <rect key="frame" x="8" y="20" width="91" height="17"/>
+                            <rect key="frame" x="8" y="20" width="91" height="16"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="iCloud owner :" id="RPH-MS-7ng">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -54,7 +56,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D6b-Dn-HcL">
-                            <rect key="frame" x="109" y="20" width="66" height="17"/>
+                            <rect key="frame" x="109" y="20" width="66" height="16"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Loading..." id="JEY-7d-aLx">
                                 <font key="font" metaFont="systemMedium" size="13"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -62,7 +64,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wq3-rO-dtd">
-                            <rect key="frame" x="8" y="47" width="95" height="17"/>
+                            <rect key="frame" x="8" y="46" width="95" height="16"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="last sync time :" id="MEH-oW-mxe">
                                 <font key="font" metaFont="system"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -70,7 +72,7 @@
                             </textFieldCell>
                         </textField>
                         <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="HDM-ar-1hB">
-                            <rect key="frame" x="-1" y="100" width="32" height="31"/>
+                            <rect key="frame" x="-1" y="98" width="32" height="31"/>
                             <buttonCell key="cell" type="round" bezelStyle="circular" image="NSStopProgressFreestandingTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="89P-0l-Loc">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
@@ -80,7 +82,7 @@
                             </connections>
                         </button>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Eh0-at-kmF">
-                            <rect key="frame" x="8" y="74" width="77" height="19"/>
+                            <rect key="frame" x="8" y="72" width="77" height="19"/>
                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Sync Info" id="doW-kt-rcK">
                                 <font key="font" metaFont="systemBold" size="16"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -259,7 +261,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Wg2-La-anv">
-                            <rect key="frame" x="92" y="95" width="40" height="22"/>
+                            <rect key="frame" x="92" y="95" width="40" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="bng-Ub-J7q"/>
                             </constraints>
@@ -295,11 +297,20 @@
                                 <action selector="pressReviewAppBtn:" target="-2" id="pkA-6a-o11"/>
                             </connections>
                         </button>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xkI-L8-bN9">
+                            <rect key="frame" x="145" y="13" width="143" height="32"/>
+                            <buttonCell key="cell" type="push" title="Purchase restore" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="D9u-vy-9sK">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstItem="75a-G2-kA8" firstAttribute="top" secondItem="wvn-A3-U4J" secondAttribute="top" constant="10" id="62j-cW-9Qd"/>
                         <constraint firstItem="GvC-8A-G4k" firstAttribute="leading" secondItem="75a-G2-kA8" secondAttribute="leading" id="CQm-gD-duL"/>
                         <constraint firstItem="GvC-8A-G4k" firstAttribute="centerY" secondItem="Wg2-La-anv" secondAttribute="centerY" id="Dpg-1X-u5N"/>
+                        <constraint firstItem="xkI-L8-bN9" firstAttribute="leading" secondItem="YsO-ZQ-S5e" secondAttribute="trailing" constant="20" id="FcU-Jd-xUy"/>
+                        <constraint firstItem="xkI-L8-bN9" firstAttribute="top" secondItem="YsO-ZQ-S5e" secondAttribute="top" id="GVL-a3-V7w"/>
                         <constraint firstItem="EAI-tB-Htv" firstAttribute="top" secondItem="GvC-8A-G4k" secondAttribute="bottom" constant="20" id="K39-dd-2Xm"/>
                         <constraint firstItem="YsO-ZQ-S5e" firstAttribute="top" secondItem="EAI-tB-Htv" secondAttribute="bottom" constant="20" id="Ocj-Ep-3ex"/>
                         <constraint firstItem="75a-G2-kA8" firstAttribute="leading" secondItem="wvn-A3-U4J" secondAttribute="leading" constant="10" id="SUg-Q6-WMH"/>

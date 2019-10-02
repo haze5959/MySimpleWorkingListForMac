@@ -51,6 +51,7 @@ class SettingViewController: NSViewController {
     @IBOutlet weak var autoUpdateTimeInterval: NSTextField!
     @IBOutlet weak var launchLoginAppCheckBox: NSButton!
     @IBOutlet weak var purchaseAndReviewBtn: NSButton!
+    @IBOutlet weak var purchaseRestoreBtn: NSButton!
     
     private let disposedBag: DisposeBag = DisposeBag()
     
@@ -66,6 +67,11 @@ class SettingViewController: NSViewController {
             } else {
                 appDelegate.disableLauncherApp(launcherAppId: launcherAppId)
             }
+        }.disposed(by: self.disposeBag)
+        
+        self.purchaseRestoreBtn.rx.tap.subscribe { (event) in
+            PremiumProducts.store.restorePurchases()
+            self.pressCloseBtn(self)
         }.disposed(by: self.disposeBag)
         
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
@@ -179,8 +185,10 @@ class SettingViewController: NSViewController {
         
         if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
             self.purchaseAndReviewBtn.title = "Review the app"
+            self.purchaseRestoreBtn.isHidden = true
         } else {
             self.purchaseAndReviewBtn.title = "Premium Version"
+            self.purchaseRestoreBtn.isHidden = false
         }
     }
 
