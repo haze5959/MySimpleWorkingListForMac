@@ -18,7 +18,7 @@ class WorkspaceViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
-        appDelegate.eventMonitor?.stop()
+//        appDelegate.eventMonitor?.stop()
         //noti for show and close progress
         NotificationCenter.default.addObserver(self, selector: #selector(showProgress), name: .showProgress, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(closeProgress), name: .closeProgress, object: nil)
@@ -38,7 +38,7 @@ class WorkspaceViewController: NSViewController {
         let sharedData = SharedData.instance
         appDelegate.popover.contentViewController = sharedData.popOverVC
         SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
-        appDelegate.eventMonitor?.start()
+//        appDelegate.eventMonitor?.start()
         sharedData.workSpaceUpdateObserver?.onNext(sharedData.seletedWorkSpace!)
     }
     

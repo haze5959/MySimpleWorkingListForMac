@@ -40,7 +40,6 @@ class SettingViewController: NSViewController {
     static let POPOVER_SCREEN_SIZE = "popOverScreenSize"
     static let AUTO_UPDATE_TIME = "autoUpdateTime"
     @IBOutlet weak var syncTimeLabel: NSTextField!
-    @IBOutlet weak var icloudOwnerLabel: NSTextField!
     
     @IBOutlet weak var openPopoverRecordView: RecordView!
     @IBOutlet weak var refreshRecordView: RecordView!
@@ -75,34 +74,10 @@ class SettingViewController: NSViewController {
         }.disposed(by: self.disposeBag)
         
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
-        appDelegate.eventMonitor?.stop()
+//        appDelegate.eventMonitor?.stop()
         
         self.openPopoverRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
         self.refreshRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
-        
-        appDelegate.container.requestApplicationPermission(.userDiscoverability) { (status, error) in
-            appDelegate.container.fetchUserRecordID { (recordId, error) in
-                guard error == nil else {
-                    DispatchQueue.main.async {
-                        self.icloudOwnerLabel.stringValue = "Unkwon";
-                    }
-                    return;
-                }
-                
-                appDelegate.container.discoverUserIdentity(withUserRecordID: recordId!, completionHandler: { (userID, error) in
-                    guard error == nil else {
-                        DispatchQueue.main.async {
-                            self.icloudOwnerLabel.stringValue = "Unkwon";
-                        }
-                        return;
-                    }
-                    
-                    DispatchQueue.main.async {
-                        self.icloudOwnerLabel.stringValue = "\((userID?.nameComponents?.givenName)! + " " + (userID?.nameComponents?.familyName)!)";
-                    }
-                })
-            }
-        }
         
         //setting radio Btn
         if UserDefaults.standard.object(forKey: SettingViewController.POPOVER_SCREEN_SIZE) != nil,
@@ -197,7 +172,7 @@ class SettingViewController: NSViewController {
         let appDelegate = NSApplication.shared.delegate as! AppDelegate
         appDelegate.popover.contentViewController = SharedData.instance.popOverVC
         SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
-        appDelegate.eventMonitor?.start()
+//        appDelegate.eventMonitor?.start()
     }
     
     @IBAction func pressReviewAppBtn(_ sender: Any) {
@@ -208,6 +183,15 @@ class SettingViewController: NSViewController {
         } else {
             let appDelegate = NSApplication.shared.delegate as! AppDelegate
             appDelegate.showPhurcaseDialog()
+        }
+    }
+    
+    @IBAction func pressQuitAppBtn(_ sender: Any) {
+        let appDelegate = NSApplication.shared.delegate as! AppDelegate
+        appDelegate.openTwoBtnDialogOKCancel(message: "Quit the app.", informativeText: "", leftBtnTitle: "Quit") { (response) in
+            if response == NSApplication.ModalResponse.alertFirstButtonReturn {
+                NSApplication.shared.terminate(self)    //Quit App
+            }
         }
     }
 }

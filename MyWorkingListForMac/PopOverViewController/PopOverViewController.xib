@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="PopOverViewController" customModule="Daily_work_note" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="PopOverViewController" customModule="Daily_Work_Note" customModuleProvider="target">
             <connections>
                 <outlet property="autoUpdateBtn" destination="pBE-cg-6m0" id="J9c-39-L84"/>
                 <outlet property="datePicker" destination="se0-uR-WYK" id="LgQ-TV-gFT"/>
@@ -35,7 +35,7 @@
                     <rect key="frame" x="0.0" y="752" width="500" height="30"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Cdz-4V-Q8w">
-                            <rect key="frame" x="163" y="7" width="75" height="17"/>
+                            <rect key="frame" x="163" y="7" width="75" height="16"/>
                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="workSpace" id="ZEc-W2-0bQ">
                                 <font key="font" usesAppearanceFont="YES"/>
                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -70,7 +70,7 @@
                                 <action selector="pressDateUpdateBtn:" target="-2" id="T0t-qY-Ic3"/>
                             </connections>
                         </button>
-                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ebK-Lm-QNL">
+                        <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ebK-Lm-QNL">
                             <rect key="frame" x="468" y="4" width="22" height="22"/>
                             <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="pin_white" imagePosition="only" alignment="center" inset="2" id="22H-I6-ipE">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -150,7 +150,7 @@
                     </connections>
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xus-Qq-CL3">
-                    <rect key="frame" x="310" y="7" width="96" height="17"/>
+                    <rect key="frame" x="310" y="7" width="96" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="Last sync time:" id="mX1-0J-oGi">
                         <font key="font" metaFont="system"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -158,7 +158,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fWx-dB-cwD" userLabel="RefreshTimeLabel">
-                    <rect key="frame" x="407" y="7" width="85" height="17"/>
+                    <rect key="frame" x="407" y="7" width="85" height="16"/>
                     <textFieldCell key="cell" lineBreakMode="clipping" title="1 minite ago.." id="qxT-9Z-0b2">
                         <font key="font" usesAppearanceFont="YES"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -171,7 +171,7 @@
                         <rect key="frame" x="1" y="1" width="498" height="498"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="97" rowSizeStyle="automatic" viewBased="YES" id="IjU-mI-9tX">
+                            <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="97" rowSizeStyle="automatic" viewBased="YES" id="IjU-mI-9tX">
                                 <rect key="frame" x="0.0" y="0.0" width="498" height="498"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -190,12 +190,12 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES"/>
                                         <prototypeCellViews>
-                                            <tableCellView misplaced="YES" id="fGE-fq-xDb" customClass="CustomCellView" customModule="Daily_work_note" customModuleProvider="target">
+                                            <tableCellView misplaced="YES" id="fGE-fq-xDb" customClass="CustomCellView" customModule="Daily_Work_Note" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="498" height="97"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GnQ-YD-RBH">
-                                                        <rect key="frame" x="0.0" y="17" width="498" height="22"/>
+                                                        <rect key="frame" x="0.0" y="16" width="498" height="22"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="22" id="bxy-U7-hBn"/>
                                                         </constraints>
@@ -206,7 +206,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="vUJ-ms-tMR">
-                                                        <rect key="frame" x="0.0" y="0.0" width="498" height="17"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="498" height="16"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" alignment="left" drawsBackground="YES" id="tzI-T4-iKQ">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -318,7 +318,7 @@
                         <action selector="pressExtendBtn:" target="-2" id="oze-5r-UPf"/>
                     </connections>
                 </button>
-                <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S9B-0e-3qf" customClass="IndicatorView" customModule="Daily_work_note" customModuleProvider="target">
+                <customView hidden="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S9B-0e-3qf" customClass="IndicatorView" customModule="Daily_Work_Note" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="500" height="782"/>
                 </customView>
             </subviews>

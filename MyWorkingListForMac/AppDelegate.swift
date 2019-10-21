@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     var container: CKContainer!
     var privateDB: CKDatabase!
-    var eventMonitor: EventMonitor? //to detect click in outside
+//    var eventMonitor: EventMonitor? //to detect click in outside
     
     let statusItem:NSStatusItem  = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     public let popover = NSPopover()
@@ -43,11 +43,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.popover.contentViewController = SharedData.instance.popOverVC
 
         //detect click in outside
-        eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
-            if let strongSelf = self, strongSelf.popover.isShown {
-                strongSelf.closePopover(sender: event)
-            }
-        }
+//        eventMonitor = EventMonitor(mask: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+//            if let strongSelf = self,
+//                strongSelf.popover.isShown,
+//                let contentVC = strongSelf.popover.contentViewController,
+//                let event = event {
+//                if !contentVC.view.frame.contains(event.locationInWindow) {
+//                    strongSelf.closePopover(sender: event)
+//                }
+//            }
+//
+//            return event
+//        }
         
         //setting hot key
         //open popover hot key
@@ -57,15 +64,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 hotKey.register()
             }
         
-        } else {
-            //default shortcut key
-            let keyCombo = KeyCombo(doubledCocoaModifiers: .shift)
-            let hotKey = HotKey(identifier: hotKeyEnum.HOTKEY_OPEN.rawValue, keyCombo: keyCombo!, target: self, action: #selector(hotkeyOpenCalled))
-            hotKey.register()
-
-            if let encoded = try? JSONEncoder().encode(keyCombo) {
-                UserDefaults.standard.set(encoded, forKey: hotKeyEnum.HOTKEY_OPEN.rawValue)
-            }
         }
         
         //refresh hot key
@@ -78,10 +76,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         self.initCloud()
         self.initUpdateTaskObserver()
-        
-        if !PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
-            PremiumProducts.store.restorePurchases()
-        }
         
         self.showReviewTimer(second: 7200)
         self.manageLauncherApp()
@@ -139,14 +133,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func showPopover(sender: Any?) {
         if let button = statusItem.button {
-            self.eventMonitor?.start()
+//            self.eventMonitor?.start()
             self.popover.show(relativeTo: button.bounds, of: button, preferredEdge: NSRectEdge.minY)
             SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
         }
     }
     
     func closePopover(sender: Any?) {
-        self.eventMonitor?.stop()
+//        self.eventMonitor?.stop()
         self.popover.performClose(sender)
     }
     
@@ -167,11 +161,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     // MARK: Open dialog
-    func openTwoBtnDialogOKCancel(message: String, informativeText: String, leftBtnTitle: String = "OK", rightBtnTitle: String = "Cancel", _ completion: @escaping (_ response: NSApplication.ModalResponse) -> Void) -> Void
+    func openTwoBtnDialogOKCancel(message: String, informativeText: String, icon: NSImage? = nil, leftBtnTitle: String = "OK", rightBtnTitle: String = "Cancel", _ completion: @escaping (_ response: NSApplication.ModalResponse) -> Void) -> Void
     {
         DispatchQueue.main.async {
             let alert = NSAlert()
-            alert.icon = #imageLiteral(resourceName: "Premium")
+            if let icon = icon {
+                alert.icon = icon
+            }
+            
             alert.messageText = message
             alert.informativeText = informativeText
             alert.alertStyle = NSAlert.Style.informational
@@ -534,7 +531,7 @@ extension AppDelegate {
                 }
             } else {
                 self.reviewTimer = Timer.scheduledTimer(withTimeInterval: TimeInterval(second), repeats: true, block: { timer in
-                    if PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
+                    if !PremiumProducts.store.isProductPurchased(PremiumProducts.premiumVersion) {
                         self.showPhurcaseDialog()
                     }
                 })
@@ -554,7 +551,7 @@ extension AppDelegate {
                     numberFormatter.numberStyle = .currency
                     numberFormatter.locale = locale
                     
-                    self.openTwoBtnDialogOKCancel(message: product.localizedTitle, informativeText: product.localizedDescription, leftBtnTitle: "Later...", rightBtnTitle: numberFormatter.string(from: product.price)!, { (response) in
+                    self.openTwoBtnDialogOKCancel(message: product.localizedTitle, informativeText: product.localizedDescription, icon: #imageLiteral(resourceName: "Premium"),  leftBtnTitle: "Later...", rightBtnTitle: numberFormatter.string(from: product.price)!, { (response) in
                         if response == NSApplication.ModalResponse.alertSecondButtonReturn {
                             PremiumProducts.store.buyProduct(product)
                         }
@@ -573,6 +570,12 @@ extension AppDelegate {
     @objc func buyComplete() {
         self.openOneBtnDialogOK(question: "Info", text: "Purchase completed!") {
             print("Purchase completed!")
+            
+            if ((self.popover.contentViewController as? PopOverViewController) == nil) {
+                self.popover.contentViewController = SharedData.instance.popOverVC
+                SharedData.instance.popOverVC.pinBtn.image = #imageLiteral(resourceName: "pin_white")
+//                self.eventMonitor?.start()
+            }
         }
     }
     

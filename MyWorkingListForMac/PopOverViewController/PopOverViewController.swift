@@ -160,19 +160,19 @@ class PopOverViewController: NSViewController, PopOverViewControllerDelegate {
         self.datePicker.sendAction(on: action)
         
         //Pin 버튼 이벤트 등록
-        self.pinBtn.rx.tap.subscribe(onNext: { () in
-            guard let eventMonitor = (NSApplication.shared.delegate as! AppDelegate).eventMonitor else {
-                return
-            }
-            
-            if eventMonitor.monitor == nil {
-                self.pinBtn.image = #imageLiteral(resourceName: "pin_white")
-                eventMonitor.start()
-            } else {
-                self.pinBtn.image = #imageLiteral(resourceName: "pin_black")
-                eventMonitor.stop()
-            }
-        }).disposed(by: self.disposeBag)
+//        self.pinBtn.rx.tap.subscribe(onNext: { () in
+//            guard let eventMonitor = (NSApplication.shared.delegate as! AppDelegate).eventMonitor else {
+//                return
+//            }
+//
+//            if eventMonitor.monitor == nil {
+//                self.pinBtn.image = #imageLiteral(resourceName: "pin_white")
+//                eventMonitor.start()
+//            } else {
+//                self.pinBtn.image = #imageLiteral(resourceName: "pin_black")
+//                eventMonitor.stop()
+//            }
+//        }).disposed(by: self.disposeBag)
         
         //데이터 초기화 옵져버
         Observable<myWorkspace>.create{ observer in
