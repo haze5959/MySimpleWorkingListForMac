@@ -77,7 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         self.initCloud()
         self.initUpdateTaskObserver()
         
-        self.showReviewTimer(second: 7200)
+        self.showReviewTimer(second: 3600)
         self.manageLauncherApp()
         
         NotificationCenter.default.addObserver(self,
@@ -568,6 +568,8 @@ extension AppDelegate {
     }
     
     @objc func buyComplete() {
+        self.reviewTimer?.invalidate()
+        self.reviewTimer = nil
         self.openOneBtnDialogOK(question: "Info", text: "Purchase completed!") {
             print("Purchase completed!")
             
