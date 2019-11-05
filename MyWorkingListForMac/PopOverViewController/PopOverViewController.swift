@@ -509,6 +509,7 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
             }
             
             self.textView.string = task.body
+            self.textView.window?.makeFirstResponder(self.textView.superview)
         }
         
         return true
@@ -517,6 +518,7 @@ extension PopOverViewController: NSTableViewDataSource, NSTableViewDelegate {
     @objc func doubleClickTableRow() {
         print("double Click row!")
         self.pressExtendBtn(nil)
+        self.textView.window?.makeFirstResponder(self.textView.superview)
     }
     
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {

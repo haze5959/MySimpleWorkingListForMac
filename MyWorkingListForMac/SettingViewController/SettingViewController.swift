@@ -73,9 +73,6 @@ class SettingViewController: NSViewController {
             self.pressCloseBtn(self)
         }.disposed(by: self.disposeBag)
         
-        let appDelegate = NSApplication.shared.delegate as! AppDelegate
-//        appDelegate.eventMonitor?.stop()
-        
         self.openPopoverRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
         self.refreshRecordView.tintColor = NSColor(red: 0.164, green: 0.517, blue: 0.823, alpha: 1)
         
